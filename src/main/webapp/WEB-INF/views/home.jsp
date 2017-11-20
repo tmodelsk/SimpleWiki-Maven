@@ -10,5 +10,6 @@
 </h1>
 
 <P> home.jsp: The time on the server is ${serverTime}. </P>
+<p>Message: ${message}</p>
 </body>
 </html>
