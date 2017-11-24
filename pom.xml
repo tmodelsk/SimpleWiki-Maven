@@ -33,6 +33,12 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-test-mvc -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-test-mvc</artifactId>
+		    <version>1.0.0.M2</version>
+		</dependency>
 				
 		<!-- AspectJ -->
 		<dependency>
