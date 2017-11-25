@@ -8,5 +8,10 @@ public class SampleTests {
 	public void someAlwaysTrueTest() {
 		
 	}
+	
+	@Test
+	public void anotherAlwaysTrueTest() {
+		
+	}
 
 }
