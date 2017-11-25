@@ -39,10 +39,11 @@ public class HomeControllerTests {
 		//Model modelMap = new Model();
 		//String viewName = controller.homePage(null, model);
 		
-		//val x = "sdfsd";
+		// val perform = 
+		mockMvc.perform(get("/", 1l))
+			.andExpect(status().isOk())
+			.andExpect(view().name("home"));
 		
-		
-		ResultActions perform = mockMvc.perform(get("/", 1l));
 		
 	}
 	
