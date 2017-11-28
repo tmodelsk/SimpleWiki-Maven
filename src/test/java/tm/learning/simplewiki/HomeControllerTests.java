@@ -9,6 +9,7 @@ import org.springframework.test.web.server.ResultActions;
 import org.springframework.test.web.server.request.MockMvcRequestBuilders;
 import org.springframework.test.web.server.setup.MockMvcBuilders;
 
+import lombok.val;
 import tm.learning.simplewiki.controllers.HomeController;
 
 import static org.mockito.Mockito.*;
@@ -19,10 +20,14 @@ public class HomeControllerTests {
 		
 	@Test
 	public void rootUrl_ExpectedViewMainPage() throws Exception {
-		mockMvc.perform(get("/", 1l))
-			.andExpect(status().isOk())
-			.andExpect(view().name("view"))
-			.andExpect(model().attributeExists("page"));
+		val result =  mockMvc.perform(get("/", 1l));
+			
+		result.andExpect(status().isOk())
+			.andExpect(view().name("view"));
+		
+		result.andExpect(model().attributeExists("page"));
+		
+		result.andExpect(model().attributeExists("wiki"));
 	}
 	
 	@Test

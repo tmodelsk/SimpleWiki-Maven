@@ -17,6 +17,7 @@ import lombok.val;
 import tm.learning.simplewiki.views.PageHtmlInfo;
 import tm.learning.simplewiki.views.PageInfo;
 import tm.learning.simplewiki.views.PageWHtmlInfo;
+import tm.learning.simplewiki.views.WikiInfo;
 
 /**
  * Handles requests for the application home page.
@@ -26,8 +27,9 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	private void addPageToModel(PageInfo pageData, Model model) {
+	private void addPageToModel(PageInfo pageData, WikiInfo wikiData, Model model) {
 		model.addAttribute("page", pageData );
+		model.addAttribute("wiki", wikiData );
 	}
 	
 	
@@ -47,7 +49,9 @@ public class HomeController {
 		pageData.setName(pageName);
 		pageData.setHtmlBody("Body of " + pageName);
 		
-		addPageToModel(pageData, model);
+		val wikiData = new WikiInfo("Some wiki" , 5);
+		
+		addPageToModel(pageData, wikiData, model);
 		
 		return "view";
 	}
@@ -68,7 +72,8 @@ public class HomeController {
 		pageData.setName(pageName);
 		pageData.setWhtmlBody("Body of " + pageName);
 		
-		addPageToModel(pageData, model);
+		val wikiData = new WikiInfo("some wiki" , 5);
+		addPageToModel(pageData, wikiData, model);
 		
 		return "edit";
 	}
@@ -82,7 +87,8 @@ public class HomeController {
 		pageData.setName(pageName);
 		pageData.setHtmlBody("Body of " + pageName);
 			
-		addPageToModel(pageData, model);
+		val wikiData = new WikiInfo("some wiki" , 5);
+		addPageToModel(pageData, wikiData,model);
 		
 		return "view";			
 	}
@@ -95,7 +101,8 @@ public class HomeController {
 		pageData.setName(pageName);
 		pageData.setWhtmlBody("Body of " + pageName);
 		
-		addPageToModel(pageData, model);
+		val wikiData = new WikiInfo("some wiki" , 5);
+		addPageToModel(pageData, wikiData, model);
 		
 		return "edit";
 	}

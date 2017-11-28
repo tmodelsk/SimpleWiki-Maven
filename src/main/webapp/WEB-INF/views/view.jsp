@@ -5,6 +5,16 @@
 	<title>${page.name}</title>
 </head>
 <body>
-${page.htmlBody}
+
+<table>
+<tr>
+	<td>
+		<img alt="Wiki icon" width="100" height="100" src="resources/wiki-button-simple.png">
+		<p>${wiki.name}</p>
+		<br/><a href="">Main</a>
+	</td>
+	<td>${page.htmlBody}</td>
+</tr>
+</table>
 </body>
 </html>
