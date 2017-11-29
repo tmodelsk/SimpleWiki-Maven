@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.val;
+import tm.learning.simplewiki.model.SimpleWikiBaseEx;
+import tm.learning.simplewiki.model.WikiService;
+import tm.learning.simplewiki.model.data.Page;
+import tm.learning.simplewiki.model.data.Wiki;
 import tm.learning.simplewiki.views.PageHtmlInfo;
 import tm.learning.simplewiki.views.PageInfo;
 import tm.learning.simplewiki.views.PageWHtmlInfo;
@@ -25,13 +30,29 @@ import tm.learning.simplewiki.views.WikiInfo;
 @Controller
 public class HomeController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	
 	private void addPageToModel(PageInfo pageData, WikiInfo wikiData, Model model) {
 		model.addAttribute("page", pageData );
 		model.addAttribute("wiki", wikiData );
 	}
 	
+	private PageHtmlInfo fillPageHtml(Page page) {
+		val pageData = new PageHtmlInfo();
+		
+		if(page != null) {
+			pageData.setName(page.getName());
+			pageData.setHtmlBody(page.getBody());	
+		}
+		
+		return pageData;
+	}
+	private WikiInfo fillWikiInfo(Wiki wiki) {
+		
+		if(wiki == null) throw new SimpleWikiBaseEx("Wiki is null!");
+		
+		val wikiData = new WikiInfo(wiki.getName() , 999);
+		
+		return wikiData;
+	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String homePage(Locale locale, Model model) {
@@ -45,11 +66,14 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		val pageData = new PageHtmlInfo();
-		pageData.setName(pageName);
-		pageData.setHtmlBody("Body of " + pageName);
+		//Thread.sleep(5000);
 		
-		val wikiData = new WikiInfo("Some wiki" , 5);
+		val pageResult = wikiService.getWikiAndPage(null, null);
+		
+		if(pageResult.wiki() == null) throw new SimpleWikiBaseEx("There's no default wiki!");
+		
+		val wikiData = fillWikiInfo(pageResult.wiki());
+		val pageData = fillPageHtml(pageResult.page());
 		
 		addPageToModel(pageData, wikiData, model);
 		
@@ -106,5 +130,10 @@ public class HomeController {
 		
 		return "edit";
 	}
+
+	@Autowired
+	private WikiService wikiService;
+	
+	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 }
