@@ -45,6 +45,16 @@ public class HomeController {
 		
 		return pageData;
 	}
+	private PageWHtmlInfo fillPageWHtml(Page page) {
+		val pageData = new PageWHtmlInfo();
+		
+		if(page != null) {
+			pageData.setName(page.getName());
+			pageData.setWhtmlBody(page.getBody());	
+		}
+		
+		return pageData;
+	}
 	private WikiInfo fillWikiInfo(Wiki wiki) {
 		
 		if(wiki == null) throw new SimpleWikiBaseEx("Wiki is null!");
@@ -57,8 +67,6 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String homePage(Locale locale, Model model) {
 		logger.info("Home! The client locale is {}.", locale);
-		
-		String pageName = "home";
 		
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
@@ -92,11 +100,11 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		val pageData = new PageWHtmlInfo();
-		pageData.setName(pageName);
-		pageData.setWhtmlBody("Body of " + pageName);
+		val pageResult = wikiService.getWikiAndPage(null, null);
 		
-		val wikiData = new WikiInfo("some wiki" , 5);
+		val pageData = fillPageWHtml(pageResult.page());
+		val wikiData = fillWikiInfo(pageResult.wiki());
+		
 		addPageToModel(pageData, wikiData, model);
 		
 		return "edit";
