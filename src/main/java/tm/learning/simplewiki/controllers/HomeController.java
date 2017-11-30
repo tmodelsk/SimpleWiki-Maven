@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.val;
+import tm.learning.simplewiki.model.PageResult;
 import tm.learning.simplewiki.model.SimpleWikiBaseEx;
 import tm.learning.simplewiki.model.WikiService;
 import tm.learning.simplewiki.model.data.Page;
@@ -64,6 +65,14 @@ public class HomeController {
 		return wikiData;
 	}
 	
+	private PageResult getWikiAndPage(String wikiUrlPrefix, String pageName) {
+		val pageResult = wikiService.getWikiAndPage(wikiUrlPrefix, pageName);
+		
+		if(pageResult.wiki() == null) throw new SimpleWikiBaseEx("There's no default wiki!");
+		
+		return pageResult;
+	}
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String homePage(Locale locale, Model model) {
 		logger.info("Home! The client locale is {}.", locale);
@@ -76,9 +85,7 @@ public class HomeController {
 		
 		//Thread.sleep(5000);
 		
-		val pageResult = wikiService.getWikiAndPage(null, null);
-		
-		if(pageResult.wiki() == null) throw new SimpleWikiBaseEx("There's no default wiki!");
+		val pageResult = getWikiAndPage(null, null);
 		
 		val wikiData = fillWikiInfo(pageResult.wiki());
 		val pageData = fillPageHtml(pageResult.page());
@@ -112,15 +119,14 @@ public class HomeController {
 	
 	@RequestMapping(value = "/{pageName}", method = RequestMethod.GET)
 	public String viewPage(Locale locale, Model model, @PathVariable("pageName") String pageName) {
-		
 		logger.info("viewPage {}, locale {}.", pageName, locale); 
 		
-		val pageData = new PageHtmlInfo(); 
-		pageData.setName(pageName);
-		pageData.setHtmlBody("Body of " + pageName);
-			
-		val wikiData = new WikiInfo("some wiki" , 5);
-		addPageToModel(pageData, wikiData,model);
+		val pageResult = getWikiAndPage(null, pageName);
+		
+		val wikiData = fillWikiInfo(pageResult.wiki());
+		val pageData = fillPageHtml(pageResult.page());
+		
+		addPageToModel(pageData, wikiData, model);
 		
 		return "view";			
 	}
@@ -129,11 +135,12 @@ public class HomeController {
 	public String editPage(Locale locale, Model model, @PathVariable("pageName") String pageName) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
-		val pageData = new PageWHtmlInfo();
-		pageData.setName(pageName);
-		pageData.setWhtmlBody("Body of " + pageName);
+				
+		val pageResult = getWikiAndPage(null, pageName);
 		
-		val wikiData = new WikiInfo("some wiki" , 5);
+		val wikiData = fillWikiInfo(pageResult.wiki());
+		val pageData = fillPageHtml(pageResult.page());
+		
 		addPageToModel(pageData, wikiData, model);
 		
 		return "edit";

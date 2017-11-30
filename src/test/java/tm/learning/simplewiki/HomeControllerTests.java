@@ -20,6 +20,7 @@ import tm.learning.simplewiki.model.SimpleWikiBaseEx;
 import tm.learning.simplewiki.model.WikiService;
 import tm.learning.simplewiki.model.data.Page;
 import tm.learning.simplewiki.model.data.Wiki;
+import tm.learning.simplewiki.views.Views;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -45,8 +46,7 @@ public class HomeControllerTests {
 		
 		when(wikiService.getWikiAndPage(null, null)).thenReturn(wikiResult);
 		
-		val result =  mockMvc.perform(get("/", 1l));
-		checkBasic("view", result);
+		performGetCheck("/", Views.PAGE_VIEW, mainPage.getName());
 	}
 	
 	@Test
@@ -68,10 +68,7 @@ public class HomeControllerTests {
 		
 		when(wikiService.getWikiAndPage(null, null)).thenReturn(wikiResult);
 		
-		val result =  mockMvc.perform(get("?edit", 1l));
-		
-		checkBasic("edit", result);
-		checkPageName("Home", result);
+		performGetCheck("?edit", Views.PAGE_EDIT, mainPage.getName());
 	}
 	
 	@Test
@@ -87,23 +84,53 @@ public class HomeControllerTests {
 		when(wikiService.getWikiAndPage(null, null)).thenReturn(wikiMainResult);
 		when(wikiService.getWikiAndPage(null, "someExistingPage")).thenReturn(wikiSomePageResult);
 		
-		val result =  mockMvc.perform(get("/", 1l));
-		checkBasic("view", result);
+		performGetCheck("/"+somePage.getUrlPrefix(), Views.PAGE_VIEW, somePage.getName());
 	}
 	
 	@Test
 	public void existingPageEditUrl_ExpectedViewPage() throws Exception {
-		mockMvc.perform(get("/someExistingPage?edit=a", 1l))
-			.andExpect(status().isOk())
-			.andExpect(view().name("edit"))
-			.andExpect(model().attributeExists("page"));
+		val wiki = new Wiki("main wiki", "desc", null);
+		val mainPage = new Page("Home", null, "some html");
+		val somePage = new Page("Some page", "someExistingPage" , "some page html");
+		
+		val wikiMainResult = new PageResult(wiki, mainPage);
+		val wikiSomePageResult = new PageResult(wiki, somePage);
+	
+		when(wikiService.getWikiAndPage(null, null)).thenReturn(wikiMainResult);
+		when(wikiService.getWikiAndPage(null, "someExistingPage")).thenReturn(wikiSomePageResult);
+		
+		
+		performGetCheck("/"+somePage.getUrlPrefix()+"?edit", Views.PAGE_EDIT, somePage.getName());
 	}
 
+	public void mainWikiExistsRootUrlPageNotExisting_ExpectedEditPage() throws Exception {
+		val wiki = new Wiki("main wiki", "desc", null);
+		val mainPage = new Page("Home", null, "some html");
+		val somePage = new Page("Some page", "someExistingPage" , "some page html");
+		
+		val wikiMainResult = new PageResult(wiki, mainPage);
+		val wikiSomePageResult = new PageResult(wiki, somePage);
+	
+		val unexistingPage = "someUnexistingPage";
+		when(wikiService.getWikiAndPage(null, null)).thenReturn(wikiMainResult);
+		when(wikiService.getWikiAndPage(null, "someExistingPage")).thenReturn(wikiSomePageResult);
+		when(wikiService.getWikiAndPage(null, unexistingPage)).thenReturn(new PageResult(wiki, null));
+		
+		performGetCheck("/"+unexistingPage, Views.PAGE_EDIT, unexistingPage);
+	}
+	
+	private void performGetCheck(String url, String viewExpected, String pageNameExpected) throws Exception {
+		val result =  mockMvc.perform(get(url, 1l));
+		check(viewExpected, pageNameExpected, result);
+	}
+	private void check(String viewExpected, String pageNameExpected, ResultActions resultAction) throws Exception {
+		checkView(viewExpected, resultAction);
+		checkPageName(pageNameExpected, resultAction);
+	}
 	private void checkPageName(String expected, ResultActions resultAction) throws Exception {
 		resultAction.andExpect(model().attribute("page", allOf(hasProperty("name", is(expected)))));
 	}
-	
-	private void checkBasic(String viewExpected, ResultActions result) throws Exception {
+	private void checkView(String viewExpected, ResultActions result) throws Exception {
 		
 		result.andExpect(status().isOk())
 		.andExpect(view().name(viewExpected));
