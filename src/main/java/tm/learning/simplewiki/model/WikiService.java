@@ -4,4 +4,6 @@ public interface WikiService {
 	
 	PageResult getWikiAndPage(String wikiUrlPrefix, String pageName);
 
+	//void clearRepository();
+	
 }

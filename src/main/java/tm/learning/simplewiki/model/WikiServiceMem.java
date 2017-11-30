@@ -16,14 +16,13 @@ public class WikiServiceMem implements WikiService {
 
 	@Override
 	public PageResult getWikiAndPage(String wikiUrlPrefix, String pageName) {
-		ensureInitialized();
 		
 		Wiki wiki = null;
 		if(wikiUrlPrefix == null) {
 			val wikiOpt = wikies.stream().filter(w -> w.getUrlPrefix() == null).findFirst();
 			if(wikiOpt.isPresent()) wiki = wikiOpt.get();
 		} else {
-			val wikiOpt = wikies.stream().filter(w -> w.getUrlPrefix().equals(wikiUrlPrefix)).findFirst();
+			val wikiOpt = wikies.stream().filter(w -> w.getUrlPrefix()!= null && w.getUrlPrefix().equals(wikiUrlPrefix)).findFirst();
 			if(wikiOpt.isPresent()) wiki = wikiOpt.get();
 		}
 		
@@ -31,16 +30,15 @@ public class WikiServiceMem implements WikiService {
 		
 		Page page = null;
 		Optional<Page> pageOpt;
-		if(pageName == null) pageOpt = wiki.getPages().stream().filter(p -> p.getUrlPrefix() == null).findFirst();
-		else pageOpt = wiki.getPages().stream().filter(p -> p.getUrlPrefix().equals(pageName)).findFirst();
+		if(pageName == null) pageOpt = wiki.getPages().stream().filter(p -> p.isDefault()).findFirst();
+		else pageOpt = wiki.getPages().stream().filter(p -> p.getUrlPrefix() != null && p.getUrlPrefix().equals(pageName)).findFirst();
 		
 		if(pageOpt.isPresent()) page = pageOpt.get();
 		
 		return new PageResult(wiki, page);
 	}
-	
-	
-	private void ensureInitialized() {
+		
+	public void ensureInitialized() {
 		if(wikies != null && wikies.size() > 0) return;
 		
 		val wiki = new Wiki();
@@ -52,6 +50,7 @@ public class WikiServiceMem implements WikiService {
 		page.setUrlPrefix(null);
 		page.setName("Main");
 		page.setBody("<h3>Some body</h3>");
+		page.setDefault(true);
 		
 		wiki.getPages().add(page);
 		
@@ -59,7 +58,24 @@ public class WikiServiceMem implements WikiService {
 		wikies.add(wiki);
 	}
 	
+	//@Override
+	public void clearRepository() {
+		wikies.clear();		
+	}
 	
+	public WikiServiceMem(boolean initialize) {
+		super();
+		if(initialize) ensureInitialized();
+	}
+
+	
+	public WikiServiceMem() {
+		this(true);
+	}
+
+
+	//private boolean initializeOnCreation = false;
+
 	private static List<Wiki> wikies; // = new ArrayList<>();
 
 }

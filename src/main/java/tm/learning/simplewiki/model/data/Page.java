@@ -9,6 +9,9 @@ public class Page {
 	private String name;
 	
 	@Getter @Setter
+	private boolean isDefault;
+	
+	@Getter @Setter
 	private String urlPrefix;
 	
 	@Getter @Setter
