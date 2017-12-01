@@ -128,6 +128,7 @@ public class HomeController {
 		
 		addPageToModel(pageData, wikiData, model);
 	}
+	@SuppressWarnings("unused")
 	private void addPageToEditModel(PageResult pageResult, Model model ) {
 		val pageData = fillPageWHtml(pageResult.page());
 		val wikiData = fillWikiInfo(pageResult.wiki());

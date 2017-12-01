@@ -21,10 +21,6 @@ public class RootServletConfig  implements WebMvcConfigurer {
         viewResolver.setViewClass(JstlView.class);
         viewResolver.setPrefix("/WEB-INF/views/");
         viewResolver.setSuffix(".jsp");
-        
-        //viewResolver.
-        
-        String str = "sdsdsd";
  
         return viewResolver;
 	}

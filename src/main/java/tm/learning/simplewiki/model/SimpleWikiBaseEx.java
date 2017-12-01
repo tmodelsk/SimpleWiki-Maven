@@ -22,6 +22,5 @@ public class SimpleWikiBaseEx extends RuntimeException {
 		super(cause);
 	}
 	
-	
-
+	private static final long serialVersionUID = -8838941244124906903L;
 }
