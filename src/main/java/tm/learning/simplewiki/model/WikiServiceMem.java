@@ -17,6 +17,50 @@ public class WikiServiceMem implements WikiService {
 	@Override
 	public PageResult getWikiAndPage(String wikiUrlPrefix, String pageName) {
 		
+		val wiki = getWiki(wikiUrlPrefix);
+		if(wiki == null) throw new SimpleWikiBaseEx("Wiki not found!");
+		
+		val page = getPage(wiki, pageName);
+		
+		return new PageResult(wiki, page);
+	}
+		
+	@Override
+	public PageResult savePage(String wikiUrlPrefix, String pageUrl, String pageName, String whtml) {
+		val wiki = getWiki(wikiUrlPrefix);
+		if(wiki == null) throw new SimpleWikiBaseEx("Wiki not found!");
+		
+		Page page = getPage(wiki, pageUrl);
+		if(page == null) {
+			// it's new page
+			page = new Page();
+			page.setUrlPrefix(pageUrl);
+			page.setName(pageName);
+			page.setBody(whtml);
+			
+			wiki.getPages().add(page);
+		}
+		else {
+			page.setName(pageName);
+			page.setBody(whtml);	
+		}
+		//throw new SimpleWikiBaseEx("Page not found");
+				
+		return new PageResult(wiki, page);
+	}
+	
+	private Page getPage(Wiki wiki, String pageName) {
+		Page page = null;
+		Optional<Page> pageOpt;
+		if(pageName == null) pageOpt = wiki.getPages().stream().filter(p -> p.isDefault()).findFirst();
+		else pageOpt = wiki.getPages().stream().filter(p -> p.getUrlPrefix() != null && p.getUrlPrefix().equals(pageName)).findFirst();
+		
+		if(pageOpt.isPresent()) page = pageOpt.get();
+		
+		return page;
+	}
+	
+	private Wiki getWiki(String wikiUrlPrefix) {
 		Wiki wiki = null;
 		if(wikiUrlPrefix == null) {
 			val wikiOpt = wikies.stream().filter(w -> w.getUrlPrefix() == null).findFirst();
@@ -26,18 +70,9 @@ public class WikiServiceMem implements WikiService {
 			if(wikiOpt.isPresent()) wiki = wikiOpt.get();
 		}
 		
-		if(wiki == null) throw new RuntimeException();
-		
-		Page page = null;
-		Optional<Page> pageOpt;
-		if(pageName == null) pageOpt = wiki.getPages().stream().filter(p -> p.isDefault()).findFirst();
-		else pageOpt = wiki.getPages().stream().filter(p -> p.getUrlPrefix() != null && p.getUrlPrefix().equals(pageName)).findFirst();
-		
-		if(pageOpt.isPresent()) page = pageOpt.get();
-		
-		return new PageResult(wiki, page);
+		return wiki;
 	}
-		
+	
 	public void ensureInitialized() {
 		if(wikies != null && wikies.size() > 0) return;
 		
@@ -77,5 +112,4 @@ public class WikiServiceMem implements WikiService {
 	//private boolean initializeOnCreation = false;
 
 	private static List<Wiki> wikies; // = new ArrayList<>();
-
 }

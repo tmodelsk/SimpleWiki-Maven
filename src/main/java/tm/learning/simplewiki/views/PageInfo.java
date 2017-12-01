@@ -14,5 +14,12 @@ public abstract class PageInfo implements Serializable {
 		super();
 	}
 	
+	public PageInfo(String name) {
+		super();
+		this.name = name;
+	}
+
+
+
 	private static final long serialVersionUID = 9116134336019391134L;
 }

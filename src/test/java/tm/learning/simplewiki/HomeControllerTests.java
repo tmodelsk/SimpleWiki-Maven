@@ -1,17 +1,24 @@
 package tm.learning.simplewiki;
 
-import org.hamcrest.beans.HasProperty;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
+//import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.server.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.server.result.MockMvcResultMatchers.view;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.server.MockMvc;
 import org.springframework.test.web.server.ResultActions;
-import org.springframework.test.web.server.request.MockMvcRequestBuilders;
 import org.springframework.test.web.server.setup.MockMvcBuilders;
-import org.springframework.web.util.NestedServletException;
 
 import lombok.val;
 import tm.learning.simplewiki.controllers.HomeController;
@@ -22,20 +29,7 @@ import tm.learning.simplewiki.model.data.Page;
 import tm.learning.simplewiki.model.data.Wiki;
 import tm.learning.simplewiki.views.Views;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.beans.HasProperty.*;
-import static org.hamcrest.beans.HasPropertyWithValue.*;
-//import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.server.request.MockMvcRequestBuilders.*; 
-import static org.springframework.test.web.server.result.MockMvcResultMatchers.*;
-
-import java.lang.reflect.Executable;
-
 public class HomeControllerTests {
-		
 	
 	@Test
 	public void mainWikimainPageExist_rootUrl_ExpectedViewMainPage() throws Exception {
@@ -103,6 +97,7 @@ public class HomeControllerTests {
 		performGetCheck("/"+somePage.getUrlPrefix()+"?edit", Views.PAGE_EDIT, somePage.getName());
 	}
 
+	@Test
 	public void mainWikiExistsRootUrlPageNotExisting_ExpectedEditPage() throws Exception {
 		val wiki = new Wiki("main wiki", "desc", null);
 		val mainPage = new Page("Home", null, "some html");
@@ -127,6 +122,7 @@ public class HomeControllerTests {
 		checkView(viewExpected, resultAction);
 		checkPageName(pageNameExpected, resultAction);
 	}
+	@SuppressWarnings("unchecked")
 	private void checkPageName(String expected, ResultActions resultAction) throws Exception {
 		resultAction.andExpect(model().attribute("page", allOf(hasProperty("name", is(expected)))));
 	}

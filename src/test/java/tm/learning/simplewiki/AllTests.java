@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ HomeControllerTests.class, SampleTests.class, WikiServiceMemTests.class })
+@SuiteClasses({ HomeControllerTests.class, WikiServiceMemTests.class })
 public class AllTests {
 
 }
