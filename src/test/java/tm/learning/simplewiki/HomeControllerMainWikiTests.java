@@ -29,10 +29,10 @@ import tm.learning.simplewiki.model.data.Page;
 import tm.learning.simplewiki.model.data.Wiki;
 import tm.learning.simplewiki.views.Views;
 
-public class HomeControllerTests {
+public class HomeControllerMainWikiTests {
 	
 	@Test
-	public void mainWikimainPageExist_rootUrl_ExpectedViewMainPage() throws Exception {
+	public void mainPageExist_rootUrl_ExpectedViewMainPage() throws Exception {
 		
 		val wiki = new Wiki("main wiki", "desc", null);
 		val mainPage = new Page("Home", null, "some html");
@@ -82,7 +82,7 @@ public class HomeControllerTests {
 	}
 	
 	@Test
-	public void existingPageEditUrl_ExpectedViewPage() throws Exception {
+	public void existingPageEditUrl_ExpectedEditPage() throws Exception {
 		val wiki = new Wiki("main wiki", "desc", null);
 		val mainPage = new Page("Home", null, "some html");
 		val somePage = new Page("Some page", "someExistingPage" , "some page html");
@@ -98,7 +98,7 @@ public class HomeControllerTests {
 	}
 
 	@Test
-	public void mainWikiExistsRootUrlPageNotExisting_ExpectedEditPage() throws Exception {
+	public void nonExistingPageUrl_ExpectedEditPage() throws Exception {
 		val wiki = new Wiki("main wiki", "desc", null);
 		val mainPage = new Page("Home", null, "some html");
 		val somePage = new Page("Some page", "someExistingPage" , "some page html");
