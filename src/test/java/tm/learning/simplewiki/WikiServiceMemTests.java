@@ -11,7 +11,7 @@ public class WikiServiceMemTests {
 	
 	@Test
 	public void mainWikiExists_rootUrl_ExpectedMainWIkiMainPage() {
-		val wikiServ = new WikiServiceMem(false);
+		val wikiServ = new WikiServiceMem(true);
 		wikiServ.ensureInitialized();
 		
 		val res = wikiServ.getWikiAndPage(null, null);
@@ -23,7 +23,7 @@ public class WikiServiceMemTests {
 
 	@Test
 	public void mainWikiExists_unexistingPageUrl_ExpectedMainWikiEditPage() {
-		val wikiServ = new WikiServiceMem(false);
+		val wikiServ = new WikiServiceMem(true);
 		wikiServ.ensureInitialized();
 		
 		val pageUrl = "someStrangeUnexistingPage";

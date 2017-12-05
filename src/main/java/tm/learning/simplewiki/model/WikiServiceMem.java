@@ -4,18 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.val;
 import tm.learning.simplewiki.model.data.Page;
 import tm.learning.simplewiki.model.data.Wiki;
+import tm.learning.simplewiki.model.repo.WikiDao;
+import tm.learning.simplewiki.model.repo.WikiDaoDb;
 
 /** Wiki Service - in memory implementation */
 @Service
+@Transactional
 public class WikiServiceMem implements WikiService {
 
 	@Override
 	public PageResult getWikiAndPage(String wikiUrlPrefix, String pageName) {
+		ensureInitialized();
 		
 		val wiki = getWiki(wikiUrlPrefix);
 		if(wiki == null) throw new SimpleWikiBaseEx("Wiki not found!");
@@ -27,6 +33,8 @@ public class WikiServiceMem implements WikiService {
 		
 	@Override
 	public PageResult savePage(String wikiUrlPrefix, String pageUrl, String pageName, String whtml) {
+		ensureInitialized();
+		
 		val wiki = getWiki(wikiUrlPrefix);
 		if(wiki == null) throw new SimpleWikiBaseEx("Wiki not found!");
 		
@@ -71,27 +79,40 @@ public class WikiServiceMem implements WikiService {
 		}
 		
 		return wiki;
+		
+		//return wikiDao.findByUrlPrefix(wikiUrlPrefix);
 	}
 	
 	public void ensureInitialized() {
-		if(wikies != null && wikies.size() > 0) return;
 		
-		val wiki = new Wiki();
-		wiki.setUrlPrefix(null);
-		wiki.setName("Main wiki");
-		wiki.setDescription("Default main wiki");
+		if(!initializeOnCreation) return;
+		//if(wikies != null && wikies.size() > 0) return;
 		
-		val page = new Page();
-		page.setUrlPrefix(null);
-		page.setName("Main");
-		page.setBody("<h3>Some body</h3>");
-		page.setDefault(true);
-		
-		wiki.getPages().add(page);
-		
-		wikies = new ArrayList<>();
-		wikies.add(wiki);
+		if(!initializationDone) {
+			val wiki = new Wiki();
+			wiki.setUrlPrefix(null);
+			wiki.setName("Main wiki");
+			wiki.setDescription("Default main wiki");
+			
+			val page = new Page();
+			page.setUrlPrefix(null);
+			page.setName("Main");
+			page.setBody("<h3>Some body</h3>");
+			page.setDefault(true);
+			
+			wiki.getPages().add(page);
+			
+			wikies = new ArrayList<>();
+			wikies.add(wiki);
+			
+			//wikiDao.save(wiki);
+			
+			initializationDone = true;
+		}
 	}
+	
+	@Autowired
+	private WikiDao wikiDao;
 	
 	//@Override
 	public void clearRepository() {
@@ -100,7 +121,8 @@ public class WikiServiceMem implements WikiService {
 	
 	public WikiServiceMem(boolean initialize) {
 		super();
-		if(initialize) ensureInitialized();
+		initializeOnCreation = initialize;
+		//if(initialize) ensureInitialized();
 	}
 
 	
@@ -109,7 +131,8 @@ public class WikiServiceMem implements WikiService {
 	}
 
 
-	//private boolean initializeOnCreation = false;
+	private boolean initializeOnCreation = false;
+	private boolean initializationDone = false;
 
 	private static List<Wiki> wikies; // = new ArrayList<>();
 }
