@@ -3,9 +3,7 @@ package tm.learning.simplewiki.model.repo;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 // based on http://websystique.com/springmvc/spring-4-mvc-jpa2-hibernate-many-to-many-example/
@@ -22,31 +20,38 @@ public class BaseDao<PK extends Serializable, T> {
     //EntityManager entityManager;
     
     @Autowired
-    protected SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
+    
+    protected SessionFactory getSessionFactory() {
+    	return sessionFactory;
+    }
+    protected Session getSession() {
+    	return getSessionFactory().getCurrentSession();
+    }
      
     //protected EntityManager getEntityManager(){
     //    return this.entityManager;
     //}
  
-    protected T getByKey(PK key) {
+     protected T getByKey(PK key) {
         //return (T) entityManager.find(persistentClass, key);
     	
-    	return sessionFactory.getCurrentSession().find(persistentClass, key);
+    	return getSession().find(persistentClass, key);
     }
  
     protected void persist(T entity) {
         //entityManager.persist(entity);
-    	sessionFactory.getCurrentSession().save(entity);
+    	getSession().save(entity);
     }
      
     protected void update(T entity) {
         //entityManager.merge(entity);
-    	sessionFactory.getCurrentSession().update(entity);
+    	getSession().update(entity);
     }
  
     protected void delete(T entity) {
         //entityManager.remove(entity);
-    	sessionFactory.getCurrentSession().remove(entity);
+    	getSession().remove(entity);
     }
 	
 }

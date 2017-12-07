@@ -3,10 +3,7 @@ package tm.learning.simplewiki.model.repo;
 import org.hibernate.query.Query;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
-import lombok.val;
 import tm.learning.simplewiki.model.data.Wiki;
 
 //@Repository("wikiDao")
@@ -20,12 +17,12 @@ public class WikiDaoDb extends BaseDao<Integer, Wiki> implements WikiDao {
 		Query<Wiki> query;
 		
 		if(urlPrefix != null) {
-			query = sessionFactory.getCurrentSession()
+			query = getSession()
 					.createQuery("SELECT w FROM Wiki w WHERE w.urlPrefix = :urlPrefix", Wiki.class)			
 					.setParameter("urlPrefix", urlPrefix);
 		}
 		else {
-			query = sessionFactory.getCurrentSession()
+			query = getSession()
 					.createQuery("SELECT w FROM Wiki w WHERE w.urlPrefix IS NULL", Wiki.class);
 		}
 		
