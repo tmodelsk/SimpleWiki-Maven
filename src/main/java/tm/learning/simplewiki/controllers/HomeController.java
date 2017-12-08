@@ -159,7 +159,7 @@ public class HomeController {
 	}
 
 	private PageResult getWikiAndPage(String wikiUrlPrefix, String pageUrl) {
-		val pageResult = wikiService.getWikiAndPage(wikiUrlPrefix, pageUrl);
+		val pageResult = wikiService.findWikiAndPage(wikiUrlPrefix, pageUrl);
 		
 		if(pageResult.wiki() == null) throw new SimpleWikiBaseEx("There's no default wiki!");
 		

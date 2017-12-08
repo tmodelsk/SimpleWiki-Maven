@@ -19,7 +19,7 @@ import tm.learning.simplewiki.model.repo.WikiDao;
 public class WikiServiceImp implements WikiService {
 
 	@Override
-	public PageResult getWikiAndPage(String wikiUrlPrefix, String pageName) {
+	public PageResult findWikiAndPage(String wikiUrlPrefix, String pageName) {
 		ensureInitialized();
 			
 		val page = pageDao.findPage(wikiUrlPrefix, pageName);

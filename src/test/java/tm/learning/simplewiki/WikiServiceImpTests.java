@@ -30,7 +30,7 @@ public class WikiServiceImpTests {
 		when(wikiDao.findByUrlPrefix(null)).thenReturn(wiki);
 		when(pageDao.findPage(null, null)).thenReturn(page);
 		
-		val res = wikiServ.getWikiAndPage(null, null);
+		val res = wikiServ.findWikiAndPage(null, null);
 		
 		assertThat(res).isNotNull();
 		assertThat(res.wiki()).isNotNull();
@@ -46,7 +46,7 @@ public class WikiServiceImpTests {
 		when(wikiDao.findByUrlPrefix(null)).thenReturn(wiki);
 		
 		val pageUrl = "someStrangeUnexistingPage";
-		val res = wikiServ.getWikiAndPage(null, pageUrl);
+		val res = wikiServ.findWikiAndPage(null, pageUrl);
 		
 		assertThat(res).isNotNull();
 		assertThat(res.wiki()).isNotNull();

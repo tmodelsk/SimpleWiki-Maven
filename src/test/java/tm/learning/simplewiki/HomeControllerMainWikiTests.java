@@ -39,7 +39,7 @@ public class HomeControllerMainWikiTests {
 		wiki.addPage(mainPage);
 		val wikiResult = new PageResult(wiki, mainPage);
 		
-		when(wikiService.getWikiAndPage(null, null)).thenReturn(wikiResult);
+		when(wikiService.findWikiAndPage(null, null)).thenReturn(wikiResult);
 		
 		performGetCheck("/", Views.PAGE_VIEW, mainPage.getName());
 	}
@@ -48,7 +48,7 @@ public class HomeControllerMainWikiTests {
 	public void mainWikiNotExists_rootUrl_ExpectedException() throws Exception {
 		val wikiResult = new PageResult(null, null);
 		
-		when(wikiService.getWikiAndPage(null, null)).thenReturn(wikiResult);
+		when(wikiService.findWikiAndPage(null, null)).thenReturn(wikiResult);
 		
 		assertThatThrownBy(() -> mockMvc.perform(get("/", 1l))).hasCauseInstanceOf(SimpleWikiBaseEx.class);
 	
@@ -61,7 +61,7 @@ public class HomeControllerMainWikiTests {
 		val mainPage = new Page("Home", null, "some html");
 		val wikiResult = new PageResult(wiki, mainPage);
 		
-		when(wikiService.getWikiAndPage(null, null)).thenReturn(wikiResult);
+		when(wikiService.findWikiAndPage(null, null)).thenReturn(wikiResult);
 		
 		performGetCheck("?edit", Views.PAGE_EDIT, mainPage.getName());
 	}
@@ -76,8 +76,8 @@ public class HomeControllerMainWikiTests {
 		val wikiMainResult = new PageResult(wiki, mainPage);
 		val wikiSomePageResult = new PageResult(wiki, somePage);
 	
-		when(wikiService.getWikiAndPage(null, null)).thenReturn(wikiMainResult);
-		when(wikiService.getWikiAndPage(null, "someExistingPage")).thenReturn(wikiSomePageResult);
+		when(wikiService.findWikiAndPage(null, null)).thenReturn(wikiMainResult);
+		when(wikiService.findWikiAndPage(null, "someExistingPage")).thenReturn(wikiSomePageResult);
 		
 		performGetCheck("/"+somePage.getUrlPrefix(), Views.PAGE_VIEW, somePage.getName());
 	}
@@ -91,8 +91,8 @@ public class HomeControllerMainWikiTests {
 		val wikiMainResult = new PageResult(wiki, mainPage);
 		val wikiSomePageResult = new PageResult(wiki, somePage);
 	
-		when(wikiService.getWikiAndPage(null, null)).thenReturn(wikiMainResult);
-		when(wikiService.getWikiAndPage(null, "someExistingPage")).thenReturn(wikiSomePageResult);
+		when(wikiService.findWikiAndPage(null, null)).thenReturn(wikiMainResult);
+		when(wikiService.findWikiAndPage(null, "someExistingPage")).thenReturn(wikiSomePageResult);
 		
 		
 		performGetCheck("/"+somePage.getUrlPrefix()+"?edit", Views.PAGE_EDIT, somePage.getName());
@@ -108,9 +108,9 @@ public class HomeControllerMainWikiTests {
 		val wikiSomePageResult = new PageResult(wiki, somePage);
 	
 		val unexistingPage = "someUnexistingPage";
-		when(wikiService.getWikiAndPage(null, null)).thenReturn(wikiMainResult);
-		when(wikiService.getWikiAndPage(null, "someExistingPage")).thenReturn(wikiSomePageResult);
-		when(wikiService.getWikiAndPage(null, unexistingPage)).thenReturn(new PageResult(wiki, null));
+		when(wikiService.findWikiAndPage(null, null)).thenReturn(wikiMainResult);
+		when(wikiService.findWikiAndPage(null, "someExistingPage")).thenReturn(wikiSomePageResult);
+		when(wikiService.findWikiAndPage(null, unexistingPage)).thenReturn(new PageResult(wiki, null));
 		
 		performGetCheck("/"+unexistingPage, Views.PAGE_EDIT, unexistingPage);
 	}
