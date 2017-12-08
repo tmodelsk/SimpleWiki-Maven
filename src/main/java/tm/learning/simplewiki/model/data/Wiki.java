@@ -34,6 +34,11 @@ public class Wiki {
 	@Getter @Setter
 	@OneToMany(mappedBy="wiki")
 	private List<Page> pages = new ArrayList<>();
+	
+	public void addPage(Page page) {
+		pages.add(page);
+		page.setWiki(this);
+	}
 
 	public Wiki(String name, String description, String urlPrefix) {
 		this();

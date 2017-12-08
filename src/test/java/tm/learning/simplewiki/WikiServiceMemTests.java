@@ -23,7 +23,7 @@ public class WikiServiceMemTests {
 
 		val wiki = new Wiki("wiki", "wiki", null);
 		val page = new Page("main", null, "main page body");
-		wiki.getPages().add(page);
+		wiki.addPage(page);
 		
 		wikiServ.ensureInitialized();
 		

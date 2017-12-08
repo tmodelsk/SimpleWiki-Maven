@@ -21,11 +21,14 @@ public class WikiServiceImp implements WikiService {
 	@Override
 	public PageResult getWikiAndPage(String wikiUrlPrefix, String pageName) {
 		ensureInitialized();
+			
+		val page = pageDao.findPage(wikiUrlPrefix, pageName);
 		
-		val wiki = getWiki(wikiUrlPrefix);
+		Wiki wiki;
+		if(page != null) wiki = page.getWiki();
+		else wiki = wikiDao.findByUrlPrefix(wikiUrlPrefix);
+		
 		if(wiki == null) throw new SimpleWikiBaseEx("Wiki not found!");
-		
-		val page = getPage(wiki, pageName);
 		
 		return new PageResult(wiki, page);
 	}
@@ -34,10 +37,9 @@ public class WikiServiceImp implements WikiService {
 	public PageResult savePage(String wikiUrlPrefix, String pageUrl, String pageName, String whtml) {
 		ensureInitialized();
 		
-		val wiki = getWiki(wikiUrlPrefix);
-		if(wiki == null) throw new SimpleWikiBaseEx("Wiki not found!");
+		Wiki wiki=null;
 		
-		Page page = getPage(wiki, pageUrl);
+		Page page = pageDao.findPage(wikiUrlPrefix, pageUrl);
 		if(page == null) {
 			// it's new page
 			page = new Page();
@@ -45,23 +47,21 @@ public class WikiServiceImp implements WikiService {
 			page.setName(pageName);
 			page.setBody(whtml);
 			
-			wiki.getPages().add(page);
+			wiki = wikiDao.findByUrlPrefix(wikiUrlPrefix);
+			if(wiki == null) throw new SimpleWikiBaseEx("Wiki not found!");
+			wiki.addPage(page);
 		}
 		else {
 			page.setName(pageName);
-			page.setBody(whtml);	
+			page.setBody(whtml);
+			
+			wiki = page.getWiki();
 		}
 		//throw new SimpleWikiBaseEx("Page not found");
 				
+		if(wiki == null) throw new SimpleWikiBaseEx("Wiki not found!");
+		
 		return new PageResult(wiki, page);
-	}
-	
-	private Page getPage(Wiki wiki, String pageName) {		
-		return pageDao.findPage(wiki.getUrlPrefix(), pageName);
-	}
-	
-	private Wiki getWiki(String wikiUrlPrefix) {		
-		return wikiDao.findByUrlPrefix(wikiUrlPrefix);
 	}
 	
 	public void ensureInitialized() {		
@@ -81,7 +81,7 @@ public class WikiServiceImp implements WikiService {
 			page.setBody("<h3>Some body</h3>");
 			page.setDefault(true);
 			
-			wiki.getPages().add(page);
+			wiki.addPage(page);
 						
 			wikiDao.save(wiki);
 			initializationDone = true;

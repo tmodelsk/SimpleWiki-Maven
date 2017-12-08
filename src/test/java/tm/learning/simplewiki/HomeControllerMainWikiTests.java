@@ -36,6 +36,7 @@ public class HomeControllerMainWikiTests {
 		
 		val wiki = new Wiki("main wiki", "desc", null);
 		val mainPage = new Page("Home", null, "some html");
+		wiki.addPage(mainPage);
 		val wikiResult = new PageResult(wiki, mainPage);
 		
 		when(wikiService.getWikiAndPage(null, null)).thenReturn(wikiResult);

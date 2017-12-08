@@ -15,10 +15,9 @@ import lombok.Setter;
 @Table(name="page")
 public class Page {
 	
-	@Id
-	@GeneratedValue
-	@Column(name = "Id", unique=true, nullable=false)
 	@Getter @Setter
+	@Id @GeneratedValue
+	@Column(name = "Id", unique=true, nullable=false)
 	private Long id;
 	
 	@Getter @Setter
