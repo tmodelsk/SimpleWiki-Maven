@@ -1,5 +1,6 @@
 package tm.learning.simplewiki.model.data;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,15 +26,18 @@ public class Page {
 	private Wiki wiki;
 	
 	@Getter @Setter
+	@Basic
 	private String name;
 	
 	@Getter @Setter
 	private boolean isDefault;
 	
 	@Getter @Setter
+	@Basic
 	private String urlPrefix;
 	
 	@Getter @Setter
+	@Basic
 	private String body;
 
 		

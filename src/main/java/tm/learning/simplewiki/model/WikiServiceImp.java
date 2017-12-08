@@ -61,6 +61,9 @@ public class WikiServiceImp implements WikiService {
 				
 		if(wiki == null) throw new SimpleWikiBaseEx("Wiki not found!");
 		
+		wikiDao.save(wiki);
+		pageDao.save(page);
+		
 		return new PageResult(wiki, page);
 	}
 	
@@ -84,6 +87,7 @@ public class WikiServiceImp implements WikiService {
 			wiki.addPage(page);
 						
 			wikiDao.save(wiki);
+			//pageDao.save(page);
 			initializationDone = true;
 		}
 	}
@@ -94,11 +98,13 @@ public class WikiServiceImp implements WikiService {
 	}
 		
 	@Autowired
-	@Qualifier("WikiDaoMem")
+	//@Qualifier("WikiDaoMem")
+	@Qualifier("WikiDaoDb")
 	private WikiDao wikiDao;
 	
 	@Autowired
-	@Qualifier("PageDaoMem")
+	//@Qualifier("PageDaoMem")
+	@Qualifier("PageDaoDb")
 	private PageDao pageDao;
 	
 	public WikiServiceImp(boolean initialize) {

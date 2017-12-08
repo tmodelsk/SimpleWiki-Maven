@@ -1,4 +1,4 @@
-package tm.learning.simplewiki.model.repo;
+package tm.learning.simplewiki.model.repo.mem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import lombok.val;
 import tm.learning.simplewiki.model.data.Wiki;
+import tm.learning.simplewiki.model.repo.WikiDao;
 
 @Repository("WikiDaoMem")
 public class WikiDaoMem implements WikiDao {

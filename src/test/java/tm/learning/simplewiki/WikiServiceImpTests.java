@@ -16,7 +16,7 @@ import tm.learning.simplewiki.model.data.Wiki;
 import tm.learning.simplewiki.model.repo.PageDao;
 import tm.learning.simplewiki.model.repo.WikiDao;
 
-public class WikiServiceMemTests {
+public class WikiServiceImpTests {
 	
 	@Test
 	public void mainWikiExists_rootUrl_ExpectedMainWIkiMainPage() {

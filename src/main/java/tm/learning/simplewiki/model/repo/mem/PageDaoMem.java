@@ -1,4 +1,4 @@
-package tm.learning.simplewiki.model.repo;
+package tm.learning.simplewiki.model.repo.mem;
 
 import java.util.Optional;
 
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import lombok.val;
 import tm.learning.simplewiki.model.SimpleWikiBaseEx;
 import tm.learning.simplewiki.model.data.Page;
+import tm.learning.simplewiki.model.repo.PageDao;
 
 @Repository("PageDaoMem")
 public class PageDaoMem implements PageDao  {
