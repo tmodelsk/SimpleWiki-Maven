@@ -12,7 +12,7 @@ import tm.learning.simplewiki.model.repo.PageDao;
 @Repository("PageDaoDb")
 public class PageDaoDb extends BaseDao<Integer, Page> implements PageDao {
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	public Page findPage(String wikiUrlPrefix, String pageUrlPrefix) {
 		
@@ -29,7 +29,7 @@ public class PageDaoDb extends BaseDao<Integer, Page> implements PageDao {
 		if(wikiUrlPrefix != null) wikiCr.add(Restrictions.eq("urlPrefix", wikiUrlPrefix));
 		else wikiCr.add(Restrictions.isNull("urlPrefix"));
 		
-		pageCr.list();
+		//pageCr.list();
 		
 		return (Page) DataAccessUtils.singleResult(pageCr.list());
 	}
