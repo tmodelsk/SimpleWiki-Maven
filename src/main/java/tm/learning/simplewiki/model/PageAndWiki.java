@@ -5,12 +5,12 @@ import tm.learning.simplewiki.model.data.Wiki;
 
 public class PageAndWiki {
 	
-	private Wiki wiki;
+	private Wiki wiki = null;
 	public Wiki wiki() {
 		return wiki;
 	}
 	
-	private Page page;
+	private Page page = null;
 	public Page page() {
 		return page;
 	}

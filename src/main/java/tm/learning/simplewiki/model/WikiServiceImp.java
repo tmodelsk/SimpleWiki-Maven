@@ -24,10 +24,11 @@ public class WikiServiceImp implements WikiService {
 
 	@Override
 	public PageResult getPageResult(PageUri pageUri) {
-		
 		val srcResp = pageFinderServ.findWikiAndPage(pageUri);
-		val page = srcResp.page();
 		val wiki = srcResp.wiki();
+		if(wiki == null) 
+			throw new SimpleWikiBaseEx(Ctm.msgFormat("Wiki '{0}' not found!", pageUri.wikiPrefix() != null ? pageUri.wikiPrefix() : "ROOT"));
+		val page = srcResp.page();
 		
 		val res = new PageResult();
 		
