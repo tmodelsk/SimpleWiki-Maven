@@ -1,7 +1,6 @@
-package tm.learning.simplewiki.model;
+package tm.learning.simplewiki.commons;
 
-import tm.learning.simplewiki.commons.StringAdapter;
-
+/** Html 'typed' String */
 public class Html extends StringAdapter {
 
 	public Html(String value) {

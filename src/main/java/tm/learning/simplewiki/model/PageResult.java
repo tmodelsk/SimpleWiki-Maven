@@ -3,7 +3,9 @@ package tm.learning.simplewiki.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import tm.learning.simplewiki.commons.Html;
 import tm.learning.simplewiki.commons.PageUri;
+import tm.learning.simplewiki.commons.WikiHtml;
 
 @Accessors(fluent=true)
 public class PageResult {

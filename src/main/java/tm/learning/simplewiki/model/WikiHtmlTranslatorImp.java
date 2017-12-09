@@ -3,6 +3,8 @@ package tm.learning.simplewiki.model;
 import org.springframework.stereotype.Service;
 
 import lombok.val;
+import tm.learning.simplewiki.commons.Html;
+import tm.learning.simplewiki.commons.WikiHtml;
 import tm.learning.simplewiki.model.data.Page;
 
 @Service

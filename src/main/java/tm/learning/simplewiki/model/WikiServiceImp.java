@@ -11,6 +11,7 @@ import lombok.val;
 import tm.common.Ctm;
 import tm.learning.simplewiki.commons.PageUri;
 import tm.learning.simplewiki.commons.SimpleWikiBaseEx;
+import tm.learning.simplewiki.commons.WikiHtml;
 import tm.learning.simplewiki.model.data.Page;
 import tm.learning.simplewiki.model.data.Wiki;
 import tm.learning.simplewiki.model.repo.PageDao;

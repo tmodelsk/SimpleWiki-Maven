@@ -11,7 +11,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import lombok.val;
+import tm.learning.simplewiki.commons.Html;
 import tm.learning.simplewiki.commons.PageUri;
+import tm.learning.simplewiki.commons.WikiHtml;
 import tm.learning.simplewiki.model.data.Page;
 import tm.learning.simplewiki.model.data.Wiki;
 
