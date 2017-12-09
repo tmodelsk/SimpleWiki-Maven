@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.val;
+import tm.common.Ctm;
+import tm.learning.simplewiki.commons.PageUri;
+import tm.learning.simplewiki.commons.SimpleWikiBaseEx;
 import tm.learning.simplewiki.model.data.Page;
 import tm.learning.simplewiki.model.data.Wiki;
 import tm.learning.simplewiki.model.repo.PageDao;
@@ -19,7 +22,59 @@ import tm.learning.simplewiki.model.repo.WikiDao;
 public class WikiServiceImp implements WikiService {
 
 	@Override
-	public PageResult findWikiAndPage(String wikiUrlPrefix, String pageName) {
+	public PageResult getPageResult(PageUri pageUri) {
+		
+		val srcResp = pageFinderServ.findWikiAndPage(pageUri);
+		val page = srcResp.page();
+		val wiki = srcResp.wiki();
+		
+		val res = new PageResult();
+		
+		res.pageUri(pageUri);
+		
+		if(page != null) {	// page is found!
+			res.mode(PageMode.View);
+			res.name(page.getName());
+			
+			val html = wikiHtmlTranslator.buildHtml(page);
+			res.html(html);
+			res.wikiHtml( new WikiHtml(page.getBody()));
+		}
+		else {
+			res.mode(PageMode.Edit);
+			res.name(pageUri.pagePrefix());
+			
+			res.wikiHtml(new WikiHtml(Ctm.msgFormat("Example content of '{0}' page", res.name())));
+			val html = wikiHtmlTranslator.buildHtml(res.wikiHtml());
+			res.html(html);
+		}
+		
+		val wikiRes = new WikiResult();
+		wikiRes.name(wiki.getName());
+		wikiRes.description(wiki.getDescription());
+		
+		res.wiki(wikiRes);
+		
+		return res;
+	}
+	
+	@Override
+	public PageResult getPageResult(PageUri pageUri, PageMode prefferedMode) {
+		val resultDefault = getPageResult(pageUri);
+		
+		if(resultDefault.mode() == prefferedMode) return resultDefault;
+		
+		if(prefferedMode == PageMode.Edit) {
+			
+			resultDefault.mode(prefferedMode);
+			return resultDefault;
+		}
+		
+		return resultDefault;
+	}
+	
+	@Override
+	public PageAndWiki findWikiAndPage(String wikiUrlPrefix, String pageName) {
 		ensureInitialized();
 			
 		val page = pageDao.findPage(wikiUrlPrefix, pageName);
@@ -30,11 +85,11 @@ public class WikiServiceImp implements WikiService {
 		
 		if(wiki == null) throw new SimpleWikiBaseEx("Wiki not found!");
 		
-		return new PageResult(wiki, page);
+		return new PageAndWiki(wiki, page);
 	}
 		
 	@Override
-	public PageResult savePage(String wikiUrlPrefix, String pageUrl, String pageName, String whtml) {
+	public PageAndWiki savePage(String wikiUrlPrefix, String pageUrl, String pageName, String whtml) {
 		ensureInitialized();
 		
 		Wiki wiki=null;
@@ -64,7 +119,7 @@ public class WikiServiceImp implements WikiService {
 		wikiDao.save(wiki);
 		pageDao.save(page);
 		
-		return new PageResult(wiki, page);
+		return new PageAndWiki(wiki, page);
 	}
 	
 	public void ensureInitialized() {		
@@ -106,6 +161,12 @@ public class WikiServiceImp implements WikiService {
 	//@Qualifier("PageDaoMem")
 	@Qualifier("PageDaoDb")
 	private PageDao pageDao;
+	
+	@Autowired
+	private PageFinder pageFinderServ;
+	@Autowired
+	private WikiHtmlTranslator wikiHtmlTranslator;
+	
 	
 	public WikiServiceImp(boolean initialize) {
 		super();

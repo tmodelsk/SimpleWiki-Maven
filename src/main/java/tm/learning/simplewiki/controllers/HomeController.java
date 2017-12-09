@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import lombok.val;
-import tm.learning.simplewiki.model.PageResult;
-import tm.learning.simplewiki.model.SimpleWikiBaseEx;
+import tm.learning.simplewiki.commons.SimpleWikiBaseEx;
+import tm.learning.simplewiki.model.PageAndWiki;
 import tm.learning.simplewiki.model.WikiService;
 import tm.learning.simplewiki.model.data.Page;
 import tm.learning.simplewiki.model.data.Wiki;
@@ -122,14 +122,14 @@ public class HomeController {
 		return "edit";
 	}
 
-	private void addPageToViewModel(PageResult pageResult, Model model ) {
+	private void addPageToViewModel(PageAndWiki pageResult, Model model ) {
 		val pageData = fillPageHtml(pageResult.page());
 		val wikiData = fillWikiInfo(pageResult.wiki());
 		
 		addPageToModel(pageData, wikiData, model);
 	}
 	@SuppressWarnings("unused")
-	private void addPageToEditModel(PageResult pageResult, Model model ) {
+	private void addPageToEditModel(PageAndWiki pageResult, Model model ) {
 		val pageData = fillPageWHtml(pageResult.page());
 		val wikiData = fillWikiInfo(pageResult.wiki());
 		
@@ -158,7 +158,7 @@ public class HomeController {
 		model.addAttribute("wiki", wikiData );
 	}
 
-	private PageResult getWikiAndPage(String wikiUrlPrefix, String pageUrl) {
+	private PageAndWiki getWikiAndPage(String wikiUrlPrefix, String pageUrl) {
 		val pageResult = wikiService.findWikiAndPage(wikiUrlPrefix, pageUrl);
 		
 		if(pageResult.wiki() == null) throw new SimpleWikiBaseEx("There's no default wiki!");

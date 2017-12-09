@@ -1,4 +1,4 @@
-package tm.learning.simplewiki.model;
+package tm.learning.simplewiki.commons;
 
 public class SimpleWikiBaseEx extends RuntimeException {
 

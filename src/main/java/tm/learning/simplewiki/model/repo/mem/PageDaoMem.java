@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import lombok.val;
-import tm.learning.simplewiki.model.SimpleWikiBaseEx;
+import tm.learning.simplewiki.commons.SimpleWikiBaseEx;
 import tm.learning.simplewiki.model.data.Page;
 import tm.learning.simplewiki.model.repo.PageDao;
 

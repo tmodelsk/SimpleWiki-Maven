@@ -1,30 +1,28 @@
 package tm.learning.simplewiki.model;
 
-import tm.learning.simplewiki.model.data.Page;
-import tm.learning.simplewiki.model.data.Wiki;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import tm.learning.simplewiki.commons.PageUri;
 
+@Accessors(fluent=true)
 public class PageResult {
 	
-	private Wiki wiki;
-	public Wiki wiki() {
-		return wiki;
-	}
+	@Getter @Setter 
+	private PageUri pageUri= null;
 	
-	private Page page;
-	public Page page() {
-		return page;
-	}
-
+	@Getter @Setter
+	private String name= null;
 	
+	@Getter @Setter
+	private Html html = null;
 	
-	public PageResult(Wiki wiki, Page page) {
-		super();
-		this.wiki = wiki;
-		this.page = page;
-	}
+	@Getter @Setter
+	private WikiHtml wikiHtml= null;
+	
+	@Getter @Setter
+	private WikiResult wiki= null;
 
-	public PageResult() {
-		super();
-	}
-
+	@Getter @Setter
+	private PageMode mode;	
 }

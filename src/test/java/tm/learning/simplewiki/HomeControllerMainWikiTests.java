@@ -21,9 +21,9 @@ import org.springframework.test.web.server.ResultActions;
 import org.springframework.test.web.server.setup.MockMvcBuilders;
 
 import lombok.val;
+import tm.learning.simplewiki.commons.SimpleWikiBaseEx;
 import tm.learning.simplewiki.controllers.HomeController;
-import tm.learning.simplewiki.model.PageResult;
-import tm.learning.simplewiki.model.SimpleWikiBaseEx;
+import tm.learning.simplewiki.model.PageAndWiki;
 import tm.learning.simplewiki.model.WikiService;
 import tm.learning.simplewiki.model.data.Page;
 import tm.learning.simplewiki.model.data.Wiki;
@@ -37,7 +37,7 @@ public class HomeControllerMainWikiTests {
 		val wiki = new Wiki("main wiki", "desc", null);
 		val mainPage = new Page("Home", null, "some html");
 		wiki.addPage(mainPage);
-		val wikiResult = new PageResult(wiki, mainPage);
+		val wikiResult = new PageAndWiki(wiki, mainPage);
 		
 		when(wikiService.findWikiAndPage(null, null)).thenReturn(wikiResult);
 		
@@ -46,7 +46,7 @@ public class HomeControllerMainWikiTests {
 	
 	@Test
 	public void mainWikiNotExists_rootUrl_ExpectedException() throws Exception {
-		val wikiResult = new PageResult(null, null);
+		val wikiResult = new PageAndWiki(null, null);
 		
 		when(wikiService.findWikiAndPage(null, null)).thenReturn(wikiResult);
 		
@@ -59,7 +59,7 @@ public class HomeControllerMainWikiTests {
 		
 		val wiki = new Wiki("main wiki", "desc", null);
 		val mainPage = new Page("Home", null, "some html");
-		val wikiResult = new PageResult(wiki, mainPage);
+		val wikiResult = new PageAndWiki(wiki, mainPage);
 		
 		when(wikiService.findWikiAndPage(null, null)).thenReturn(wikiResult);
 		
@@ -73,8 +73,8 @@ public class HomeControllerMainWikiTests {
 		val mainPage = new Page("Home", null, "some html");
 		val somePage = new Page("Some page", "someExistingPage" , "some page html");
 		
-		val wikiMainResult = new PageResult(wiki, mainPage);
-		val wikiSomePageResult = new PageResult(wiki, somePage);
+		val wikiMainResult = new PageAndWiki(wiki, mainPage);
+		val wikiSomePageResult = new PageAndWiki(wiki, somePage);
 	
 		when(wikiService.findWikiAndPage(null, null)).thenReturn(wikiMainResult);
 		when(wikiService.findWikiAndPage(null, "someExistingPage")).thenReturn(wikiSomePageResult);
@@ -88,8 +88,8 @@ public class HomeControllerMainWikiTests {
 		val mainPage = new Page("Home", null, "some html");
 		val somePage = new Page("Some page", "someExistingPage" , "some page html");
 		
-		val wikiMainResult = new PageResult(wiki, mainPage);
-		val wikiSomePageResult = new PageResult(wiki, somePage);
+		val wikiMainResult = new PageAndWiki(wiki, mainPage);
+		val wikiSomePageResult = new PageAndWiki(wiki, somePage);
 	
 		when(wikiService.findWikiAndPage(null, null)).thenReturn(wikiMainResult);
 		when(wikiService.findWikiAndPage(null, "someExistingPage")).thenReturn(wikiSomePageResult);
@@ -104,13 +104,13 @@ public class HomeControllerMainWikiTests {
 		val mainPage = new Page("Home", null, "some html");
 		val somePage = new Page("Some page", "someExistingPage" , "some page html");
 		
-		val wikiMainResult = new PageResult(wiki, mainPage);
-		val wikiSomePageResult = new PageResult(wiki, somePage);
+		val wikiMainResult = new PageAndWiki(wiki, mainPage);
+		val wikiSomePageResult = new PageAndWiki(wiki, somePage);
 	
 		val unexistingPage = "someUnexistingPage";
 		when(wikiService.findWikiAndPage(null, null)).thenReturn(wikiMainResult);
 		when(wikiService.findWikiAndPage(null, "someExistingPage")).thenReturn(wikiSomePageResult);
-		when(wikiService.findWikiAndPage(null, unexistingPage)).thenReturn(new PageResult(wiki, null));
+		when(wikiService.findWikiAndPage(null, unexistingPage)).thenReturn(new PageAndWiki(wiki, null));
 		
 		performGetCheck("/"+unexistingPage, Views.PAGE_EDIT, unexistingPage);
 	}

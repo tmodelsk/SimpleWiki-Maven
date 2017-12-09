@@ -1,4 +1,4 @@
-package tm.learning.simplewiki;
+package tm.learning.simplewiki.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -10,27 +10,25 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import lombok.val;
-import tm.learning.simplewiki.model.WikiServiceImp;
+import tm.learning.simplewiki.commons.PageUri;
 import tm.learning.simplewiki.model.data.Page;
 import tm.learning.simplewiki.model.data.Wiki;
 import tm.learning.simplewiki.model.repo.PageDao;
 import tm.learning.simplewiki.model.repo.WikiDao;
 
-public class WikiServiceImpTests {
-	
+public class PageFinderImpTests {
 	@Test
 	public void mainWikiExists_rootUrl_ExpectedMainWIkiMainPage() {
 
+		val rootUri = PageUri.ROOT;
 		val wiki = new Wiki("wiki", "wiki", null);
 		val page = new Page("main", null, "main page body");
 		wiki.addPage(page);
 		
-		wikiServ.ensureInitialized();
-		
 		when(wikiDao.findByUrlPrefix(null)).thenReturn(wiki);
 		when(pageDao.findPage(null, null)).thenReturn(page);
 		
-		val res = wikiServ.findWikiAndPage(null, null);
+		val res = wikiServ.findWikiAndPage(rootUri);
 		
 		assertThat(res).isNotNull();
 		assertThat(res.wiki()).isNotNull();
@@ -41,12 +39,11 @@ public class WikiServiceImpTests {
 	public void mainWikiExists_unexistingPageUrl_ExpectedMainWikiEditPage() {
 		val wiki = new Wiki("wiki", "wiki", null);
 		
-		wikiServ.ensureInitialized();
-		
 		when(wikiDao.findByUrlPrefix(null)).thenReturn(wiki);
 		
 		val pageUrl = "someStrangeUnexistingPage";
-		val res = wikiServ.findWikiAndPage(null, pageUrl);
+		val pageUri = new PageUri(null, pageUrl);
+		val res = wikiServ.findWikiAndPage(pageUri);
 		
 		assertThat(res).isNotNull();
 		assertThat(res.wiki()).isNotNull();
@@ -59,11 +56,10 @@ public class WikiServiceImpTests {
 	}
 	
 	@InjectMocks
-	private WikiServiceImp wikiServ;
+	private PageFinderImp wikiServ;
 	
 	@Mock
 	private WikiDao wikiDao;
 	@Mock
 	private PageDao pageDao;
-	
 }
