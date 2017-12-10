@@ -128,7 +128,7 @@ public class WikiServiceImp implements WikiService {
 			val page = new Page();
 			page.setUrlPrefix(null);
 			page.setName("Main");
-			page.setBody("<h3>Some body</h3>");
+			page.setBody("<h3>Some body</h3><p>New wiki page: [[newPage]]</p>");
 			page.setDefault(true);
 			
 			wiki.addPage(page);
