@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +17,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import lombok.val;
+import tm.learning.simplewiki.commons.PageUri;
 import tm.learning.simplewiki.commons.SimpleWikiBaseEx;
-import tm.learning.simplewiki.model.PageAndWiki;
+import tm.learning.simplewiki.model.PageMode;
+import tm.learning.simplewiki.model.PageResult;
+import tm.learning.simplewiki.model.WikiResult;
 import tm.learning.simplewiki.model.WikiService;
-import tm.learning.simplewiki.model.data.Page;
-import tm.learning.simplewiki.model.data.Wiki;
 import tm.learning.simplewiki.views.PageHtmlInfo;
 import tm.learning.simplewiki.views.PageInfo;
 import tm.learning.simplewiki.views.PageWHtmlInfo;
 import tm.learning.simplewiki.views.Views;
 import tm.learning.simplewiki.views.WikiInfo;
 
-/**
- * Handles requests for the application home page.
- */
+/** Handles requests for the application home page. */
 @Controller
 public class HomeController {
 	
@@ -37,11 +37,9 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.POST, params = "savePage")
 	private String homePageSave(@ModelAttribute("page") PageWHtmlInfo page, BindingResult result, Locale locale, Model model) {
 		logger.info("Home save! The client locale is {}.", locale);
-			
-		val pageResult = wikiService.savePage(null, null, page.getName(), page.getWhtmlBody());	
-		addPageToViewModel(pageResult, model);
 		
-		//return Views.PAGE_VIEW;
+		wikiService.savePage(PageUri.ROOT, page.getName(), page.getWhtmlBody());
+		
 		return "redirect:/";
 	}
 
@@ -49,12 +47,11 @@ public class HomeController {
 	@RequestMapping(value = "/{pageName}", method = RequestMethod.POST, params = "savePage")
 	private String pageSave(@ModelAttribute("page") PageWHtmlInfo page, @PathVariable("pageName") String pageUrl, 
 								BindingResult result, Locale locale, Model model) {
-		logger.info("Home save! The client locale is {}.", locale);
+		logger.info("Page {} save! The client locale is {}.", pageUrl, locale);
 			
-		val pageResult = wikiService.savePage(null, pageUrl, page.getName(), page.getWhtmlBody());	
-		addPageToViewModel(pageResult, model);
+		val pageUri = new PageUri(null, pageUrl);
+		wikiService.savePage(pageUri, page.getName(), page.getWhtmlBody());
 		
-		//return Views.PAGE_VIEW;
 		return "redirect:/"+pageUrl;
 	}	
 
@@ -70,24 +67,25 @@ public class HomeController {
 		
 		//Thread.sleep(5000);
 		
-		findWikiPageFillViewModel(null, null, model);
+		val pageRes = wikiService.getPageResult(PageUri.ROOT, PageMode.View);
+		if(pageRes == null || pageRes.wiki() == null) throw new SimpleWikiBaseEx("Wiki not found or critical error!");
 		
-		return "view";
+		if(pageRes.mode() == PageMode.View) {
+			addPageToViewModel(pageRes, model);
+			return Views.PAGE_VIEW;
+		}
+		
+		throw new NotImplementedException("Edit ROOT not implemented!");
 	}
 
 	// GET: /?edit
 	@RequestMapping(value = "/", method = RequestMethod.GET, params = "edit")
 	private String homePageEdit(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
-			
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		String formattedDate = dateFormat.format(date);
-		model.addAttribute("serverTime", formattedDate );
 		
-		findWikiPageFillEditModel(null, null, model);
+		findWikiPageFillEditModel(PageUri.ROOT, model);
 		
-		return "edit";
+		return Views.PAGE_EDIT;
 	}
 	
 	// GET: /{pageName}
@@ -95,19 +93,17 @@ public class HomeController {
 	public String viewPage(Locale locale, Model model, @PathVariable("pageName") String pageUrl) {
 		logger.info("viewPage {}, locale {}.", pageUrl, locale); 
 		
-		val pageResult = getWikiAndPage(null, pageUrl);
+		val pageUri = new PageUri(null, pageUrl);
 		
-		if(pageResult.page() != null) {
-			addPageToViewModel(pageResult, model);
+		val pageRes = wikiService.getPageResult(pageUri, PageMode.View);
+		if(pageRes == null || pageRes.wiki() == null) throw new SimpleWikiBaseEx("Wiki not found or critical error!");
+		
+		if(pageRes.mode() == PageMode.View) {
+			addPageToViewModel(pageRes, model);
 			return Views.PAGE_VIEW;
-		}
+		} 
 		else {
-		
-			val wikiData = fillWikiInfo(pageResult.wiki());
-			val pageData = new PageWHtmlInfo(pageUrl, "<p>Some example content of "+pageUrl+"</p>");
-			
-			addPageToModel(pageData, wikiData, model);
-
+			addPageToEditModel(pageRes, model);
 			return Views.PAGE_EDIT;
 		}		
 	}
@@ -117,85 +113,71 @@ public class HomeController {
 	public String editPage(Locale locale, Model model, @PathVariable("pageName") String pageUrl) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
-		findWikiPageFillEditModel(null, pageUrl, model);
-				
-		return "edit";
+		val pageUri = new PageUri(null, pageUrl);
+		
+		val pageRes = wikiService.getPageResult(pageUri, PageMode.View);
+		if(pageRes == null || pageRes.wiki() == null) throw new SimpleWikiBaseEx("Wiki not found or critical error!");
+		
+		addPageToEditModel(pageRes, model);
+		return Views.PAGE_EDIT;
 	}
 
-	private void addPageToViewModel(PageAndWiki pageResult, Model model ) {
-		val pageData = fillPageHtml(pageResult.page());
-		val wikiData = fillWikiInfo(pageResult.wiki());
+	
+	private void findWikiPageFillEditModel(PageUri pageUri, Model model) {
+		val pageRes = wikiService.getPageResult(PageUri.ROOT, PageMode.Edit);
+		if(pageRes == null || pageRes.wiki() == null) throw new SimpleWikiBaseEx("Wiki not found or critical error!");
 		
-		addPageToModel(pageData, wikiData, model);
-	}
-	@SuppressWarnings("unused")
-	private void addPageToEditModel(PageAndWiki pageResult, Model model ) {
-		val pageData = fillPageWHtml(pageResult.page());
-		val wikiData = fillWikiInfo(pageResult.wiki());
-		
-		addPageToModel(pageData, wikiData, model);
+		addPageToEditModel(pageRes, model);
 	}
 	
-	private void findWikiPageFillViewModel(String wikiUrlPrefix, String pageUrl, Model model) {
-		val pageResult = getWikiAndPage(wikiUrlPrefix, pageUrl);
-			
+	private void addPageToViewModel(PageResult pageResult, Model model ) {
+		val pageData = fillPageHtml(pageResult);
 		val wikiData = fillWikiInfo(pageResult.wiki());
-		val pageData = fillPageHtml(pageResult.page());
 		
 		addPageToModel(pageData, wikiData, model);
 	}
-	private void findWikiPageFillEditModel(String wikiUrlPrefix, String pageUrl, Model model) {
-		val pageResult = getWikiAndPage(wikiUrlPrefix, pageUrl);
-			
+	private void addPageToEditModel(PageResult pageResult, Model model ) {
+		val pageData = fillPageWHtml(pageResult);
 		val wikiData = fillWikiInfo(pageResult.wiki());
-		val pageData = fillPageWHtml(pageResult.page());
 		
 		addPageToModel(pageData, wikiData, model);
 	}
-	
+
 	private void addPageToModel(PageInfo pageData, WikiInfo wikiData, Model model) {
 		model.addAttribute("page", pageData );
 		model.addAttribute("wiki", wikiData );
 	}
-
-	private PageAndWiki getWikiAndPage(String wikiUrlPrefix, String pageUrl) {
-		val pageResult = wikiService.findWikiAndPage(wikiUrlPrefix, pageUrl);
-		
-		if(pageResult.wiki() == null) throw new SimpleWikiBaseEx("There's no default wiki!");
-		
-		return pageResult;
-	}
-		
-	private PageHtmlInfo fillPageHtml(Page page) {
+	private PageHtmlInfo fillPageHtml(PageResult page) {
 		val pageData = new PageHtmlInfo();
 		
 		if(page != null) {
-			pageData.setName(page.getName());
-			pageData.setHtmlBody(page.getBody());	
+			pageData.setName(page.name());
+			pageData.setHtmlBody(page.html().toString());
 		}
 		
 		return pageData;
 	}
-	private PageWHtmlInfo fillPageWHtml(Page page) {
+	private PageWHtmlInfo fillPageWHtml(PageResult page) {
 		val pageData = new PageWHtmlInfo();
 		
 		if(page != null) {
-			pageData.setName(page.getName());
-			pageData.setWhtmlBody(page.getBody());	
+			pageData.setName(page.name());
+			pageData.setWhtmlBody(page.html().toString());	
 		}
 		
 		return pageData;
-	}
-	private WikiInfo fillWikiInfo(Wiki wiki) {
+	}		
+	private WikiInfo fillWikiInfo(WikiResult wiki) {
 		
 		if(wiki == null) throw new SimpleWikiBaseEx("Wiki is null!");
 		
-		val wikiData = new WikiInfo(wiki.getName() , 999);
+		val wikiData = new WikiInfo(wiki.name() , 999);
 		
 		return wikiData;
 	}
 	
+	// ### Dependencies ###
 	@Autowired
 	private WikiService wikiService;	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-}
+};

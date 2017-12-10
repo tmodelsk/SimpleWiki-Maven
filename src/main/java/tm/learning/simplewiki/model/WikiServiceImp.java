@@ -24,6 +24,8 @@ public class WikiServiceImp implements WikiService {
 
 	@Override
 	public PageResult getPageResult(PageUri pageUri) {
+		ensureInitialized();
+		
 		val srcResp = pageFinderServ.findWikiAndPage(pageUri);
 		val wiki = srcResp.wiki();
 		if(wiki == null) 
@@ -89,7 +91,35 @@ public class WikiServiceImp implements WikiService {
 		
 		return new PageAndWiki(wiki, page);
 	}
+	
+	@Override
+	public void savePage(PageUri pageUri, String pageName, String whtml) {
 		
+		val srcResp = pageFinderServ.findWikiAndPage(pageUri);
+		val wiki = srcResp.wiki();
+		if(wiki == null) 
+			throw new SimpleWikiBaseEx(Ctm.msgFormat("Wiki '{0}' not found!", pageUri.wikiPrefix() != null ? pageUri.wikiPrefix() : "ROOT"));
+		Page page = srcResp.page();
+		
+		if(page == null) {
+			// it's new page
+			page = new Page();
+			page.setUrlPrefix(pageUri.pagePrefix());
+			page.setName(pageName);
+			page.setBody(whtml);
+			
+			wiki.addPage(page);
+			
+			wikiDao.save(wiki);
+		}
+		else {
+			page.setName(pageName);
+			page.setBody(whtml);
+			
+			pageDao.save(page);
+		}		
+	}
+	
 	@Override
 	public PageAndWiki savePage(String wikiUrlPrefix, String pageUrl, String pageName, String whtml) {
 		ensureInitialized();
@@ -126,6 +156,8 @@ public class WikiServiceImp implements WikiService {
 	
 	public void ensureInitialized() {		
 		if(!initializeOnCreation) return;
+		
+		if(wikiDao == null) return;
 		
 		if(!initializationDone) {
 			logger.info("Initializing default wiki data");

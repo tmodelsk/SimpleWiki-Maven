@@ -10,6 +10,7 @@ public interface WikiService {
 	
 	PageAndWiki findWikiAndPage(String wikiUrlPrefix, String pageUrl);
 	
+	void savePage(PageUri pageUri, String pageName, String whtml);
 	PageAndWiki savePage(String wikiUrlPrefix, String pageUrl, String pageName, String whtml);
 
 	//void clearRepository();
