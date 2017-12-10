@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import lombok.val;
 import tm.learning.simplewiki.commons.SimpleWikiBaseEx;
-import tm.learning.simplewiki.model.data.Page;
-import tm.learning.simplewiki.model.repo.PageDao;
+import tm.learning.simplewiki.model.repo.base.PageDao;
+import tm.learning.simplewiki.model.repo.data.Page;
 
 @Repository("PageDaoMem")
 public class PageDaoMem implements PageDao  {

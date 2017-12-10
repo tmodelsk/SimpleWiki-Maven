@@ -14,8 +14,13 @@ import lombok.val;
 import tm.learning.simplewiki.commons.Html;
 import tm.learning.simplewiki.commons.PageUri;
 import tm.learning.simplewiki.commons.WikiHtml;
-import tm.learning.simplewiki.model.data.Page;
-import tm.learning.simplewiki.model.data.Wiki;
+import tm.learning.simplewiki.model.repo.data.Page;
+import tm.learning.simplewiki.model.repo.data.Wiki;
+import tm.learning.simplewiki.model.services.PageAndWiki;
+import tm.learning.simplewiki.model.services.PageFinder;
+import tm.learning.simplewiki.model.services.PageMode;
+import tm.learning.simplewiki.model.services.WikiHtmlTranslator;
+import tm.learning.simplewiki.model.services.WikiServiceImp;
 
 public class WikiServImpTests_MainWikiExists {
 	

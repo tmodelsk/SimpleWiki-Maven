@@ -7,8 +7,8 @@ import java.util.stream.Stream;
 import org.springframework.stereotype.Repository;
 
 import lombok.val;
-import tm.learning.simplewiki.model.data.Wiki;
-import tm.learning.simplewiki.model.repo.WikiDao;
+import tm.learning.simplewiki.model.repo.base.WikiDao;
+import tm.learning.simplewiki.model.repo.data.Wiki;
 
 @Repository("WikiDaoMem")
 public class WikiDaoMem implements WikiDao {

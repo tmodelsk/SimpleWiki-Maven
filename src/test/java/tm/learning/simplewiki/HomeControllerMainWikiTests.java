@@ -25,10 +25,10 @@ import tm.learning.simplewiki.commons.Html;
 import tm.learning.simplewiki.commons.PageUri;
 import tm.learning.simplewiki.commons.WikiHtml;
 import tm.learning.simplewiki.controllers.HomeController;
-import tm.learning.simplewiki.model.PageMode;
-import tm.learning.simplewiki.model.PageResult;
-import tm.learning.simplewiki.model.WikiResult;
-import tm.learning.simplewiki.model.WikiService;
+import tm.learning.simplewiki.model.services.PageMode;
+import tm.learning.simplewiki.model.services.PageResult;
+import tm.learning.simplewiki.model.services.WikiResult;
+import tm.learning.simplewiki.model.services.WikiService;
 import tm.learning.simplewiki.views.Views;
 
 public class HomeControllerMainWikiTests {

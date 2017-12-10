@@ -1,11 +1,11 @@
-package tm.learning.simplewiki.model;
+package tm.learning.simplewiki.model.services;
 
 import org.springframework.stereotype.Service;
 
 import lombok.val;
 import tm.learning.simplewiki.commons.Html;
 import tm.learning.simplewiki.commons.WikiHtml;
-import tm.learning.simplewiki.model.data.Page;
+import tm.learning.simplewiki.model.repo.data.Page;
 
 @Service
 public class WikiHtmlTranslatorImp implements WikiHtmlTranslator {

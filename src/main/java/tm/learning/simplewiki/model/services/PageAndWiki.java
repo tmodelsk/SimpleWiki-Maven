@@ -1,7 +1,7 @@
-package tm.learning.simplewiki.model;
+package tm.learning.simplewiki.model.services;
 
-import tm.learning.simplewiki.model.data.Page;
-import tm.learning.simplewiki.model.data.Wiki;
+import tm.learning.simplewiki.model.repo.data.Page;
+import tm.learning.simplewiki.model.repo.data.Wiki;
 
 public class PageAndWiki {
 	

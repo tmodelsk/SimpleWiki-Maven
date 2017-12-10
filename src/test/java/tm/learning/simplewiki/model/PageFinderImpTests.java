@@ -11,10 +11,11 @@ import org.mockito.MockitoAnnotations;
 
 import lombok.val;
 import tm.learning.simplewiki.commons.PageUri;
-import tm.learning.simplewiki.model.data.Page;
-import tm.learning.simplewiki.model.data.Wiki;
-import tm.learning.simplewiki.model.repo.PageDao;
-import tm.learning.simplewiki.model.repo.WikiDao;
+import tm.learning.simplewiki.model.repo.base.PageDao;
+import tm.learning.simplewiki.model.repo.base.WikiDao;
+import tm.learning.simplewiki.model.repo.data.Page;
+import tm.learning.simplewiki.model.repo.data.Wiki;
+import tm.learning.simplewiki.model.services.PageFinderImp;
 
 public class PageFinderImpTests {
 	@Test

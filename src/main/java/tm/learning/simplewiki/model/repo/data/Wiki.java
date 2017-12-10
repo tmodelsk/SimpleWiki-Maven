@@ -1,4 +1,4 @@
-package tm.learning.simplewiki.model.data;
+package tm.learning.simplewiki.model.repo.data;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,9 +5,9 @@ import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 
 import lombok.val;
-import tm.learning.simplewiki.model.data.Page;
-import tm.learning.simplewiki.model.repo.BaseDao;
-import tm.learning.simplewiki.model.repo.PageDao;
+import tm.learning.simplewiki.model.repo.base.BaseDao;
+import tm.learning.simplewiki.model.repo.base.PageDao;
+import tm.learning.simplewiki.model.repo.data.Page;
 
 @Repository("PageDaoDb")
 public class PageDaoDb extends BaseDao<Integer, Page> implements PageDao {

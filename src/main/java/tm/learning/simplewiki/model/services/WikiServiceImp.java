@@ -1,4 +1,4 @@
-package tm.learning.simplewiki.model;
+package tm.learning.simplewiki.model.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +12,10 @@ import tm.common.Ctm;
 import tm.learning.simplewiki.commons.PageUri;
 import tm.learning.simplewiki.commons.SimpleWikiBaseEx;
 import tm.learning.simplewiki.commons.WikiHtml;
-import tm.learning.simplewiki.model.data.Page;
-import tm.learning.simplewiki.model.data.Wiki;
-import tm.learning.simplewiki.model.repo.PageDao;
-import tm.learning.simplewiki.model.repo.WikiDao;
+import tm.learning.simplewiki.model.repo.base.PageDao;
+import tm.learning.simplewiki.model.repo.base.WikiDao;
+import tm.learning.simplewiki.model.repo.data.Page;
+import tm.learning.simplewiki.model.repo.data.Wiki;
 
 /** Wiki Service - implementation */
 @Service
@@ -76,21 +76,7 @@ public class WikiServiceImp implements WikiService {
 		
 		return resultDefault;
 	}
-	
-	@Override
-	public PageAndWiki findWikiAndPage(String wikiUrlPrefix, String pageName) {
-		ensureInitialized();
-			
-		val page = pageDao.findPage(wikiUrlPrefix, pageName);
-		
-		Wiki wiki;
-		if(page != null) wiki = page.getWiki();
-		else wiki = wikiDao.findByUrlPrefix(wikiUrlPrefix);
-		
-		if(wiki == null) throw new SimpleWikiBaseEx("Wiki not found!");
-		
-		return new PageAndWiki(wiki, page);
-	}
+
 	
 	@Override
 	public void savePage(PageUri pageUri, String pageName, String whtml) {
@@ -119,40 +105,7 @@ public class WikiServiceImp implements WikiService {
 			pageDao.save(page);
 		}		
 	}
-	
-	@Override
-	public PageAndWiki savePage(String wikiUrlPrefix, String pageUrl, String pageName, String whtml) {
-		ensureInitialized();
-		
-		Wiki wiki=null;
-		
-		Page page = pageDao.findPage(wikiUrlPrefix, pageUrl);
-		if(page == null) {
-			// it's new page
-			page = new Page();
-			page.setUrlPrefix(pageUrl);
-			page.setName(pageName);
-			page.setBody(whtml);
-			
-			wiki = wikiDao.findByUrlPrefix(wikiUrlPrefix);
-			if(wiki == null) throw new SimpleWikiBaseEx("Wiki not found!");
-			wiki.addPage(page);
-		}
-		else {
-			page.setName(pageName);
-			page.setBody(whtml);
-			
-			wiki = page.getWiki();
-		}
-		//throw new SimpleWikiBaseEx("Page not found");
-				
-		if(wiki == null) throw new SimpleWikiBaseEx("Wiki not found!");
-		
-		wikiDao.save(wiki);
-		pageDao.save(page);
-		
-		return new PageAndWiki(wiki, page);
-	}
+
 	
 	public void ensureInitialized() {		
 		if(!initializeOnCreation) return;

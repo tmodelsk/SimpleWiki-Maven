@@ -4,9 +4,9 @@ import org.hibernate.query.Query;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 
-import tm.learning.simplewiki.model.data.Wiki;
-import tm.learning.simplewiki.model.repo.BaseDao;
-import tm.learning.simplewiki.model.repo.WikiDao;
+import tm.learning.simplewiki.model.repo.base.BaseDao;
+import tm.learning.simplewiki.model.repo.base.WikiDao;
+import tm.learning.simplewiki.model.repo.data.Wiki;
 
 @Repository("WikiDaoDb")
 public class WikiDaoDb extends BaseDao<Integer, Wiki> implements WikiDao {

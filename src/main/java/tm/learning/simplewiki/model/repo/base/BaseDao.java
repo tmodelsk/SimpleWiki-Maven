@@ -1,4 +1,4 @@
-package tm.learning.simplewiki.model.repo;
+package tm.learning.simplewiki.model.repo.base;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;

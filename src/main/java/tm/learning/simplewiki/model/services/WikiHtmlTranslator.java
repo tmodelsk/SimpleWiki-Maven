@@ -1,8 +1,8 @@
-package tm.learning.simplewiki.model;
+package tm.learning.simplewiki.model.services;
 
 import tm.learning.simplewiki.commons.Html;
 import tm.learning.simplewiki.commons.WikiHtml;
-import tm.learning.simplewiki.model.data.Page;
+import tm.learning.simplewiki.model.repo.data.Page;
 
 /** Creates page plain Html basing on page Wiki-Html */
 public interface WikiHtmlTranslator {

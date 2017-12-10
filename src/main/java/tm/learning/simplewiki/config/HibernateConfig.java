@@ -10,8 +10,8 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import tm.learning.simplewiki.model.data.Page;
-import tm.learning.simplewiki.model.data.Wiki;
+import tm.learning.simplewiki.model.repo.data.Page;
+import tm.learning.simplewiki.model.repo.data.Wiki;
 
 @Configuration
 @EnableTransactionManagement

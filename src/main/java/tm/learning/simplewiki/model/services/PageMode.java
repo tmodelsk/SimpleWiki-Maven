@@ -1,4 +1,4 @@
-package tm.learning.simplewiki.model;
+package tm.learning.simplewiki.model.services;
 
 public enum PageMode {
 
