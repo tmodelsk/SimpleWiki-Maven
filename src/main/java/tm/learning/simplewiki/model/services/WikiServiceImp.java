@@ -130,7 +130,17 @@ public class WikiServiceImp implements WikiService {
 				val page = new Page();
 				page.setUrlPrefix(null);
 				page.setName("Main");
-				page.setBody("<h3>Some body</h3>"+System.lineSeparator()+"New wiki page: [[newPage]]");
+				
+				val strB = new StringBuilder();
+				val nl = System.lineSeparator();
+				strB.append("<h3>Simple Java based wiki</h3>"+nl);
+				strB.append("New wiki page: [[newPage]]" + nl);
+				strB.append("<b>Source code:</b> <a href='https://github.com/tmodelsk/SimpleWiki-Maven' target=_blank>github.com/tmodelsk/SimpleWiki-Maven</a>" + nl);
+				strB.append("<b>Stack: </b>");
+				strB.append("Java 8, Maven, Spring MVC 5, Hibernate 5 + HSQLDB" + nl);
+				strB.append("<b>Deployed: </b>");
+				strB.append("Azure website, Tomcat 8.5" + nl);
+				page.setBody(strB.toString());
 				page.setDefault(true);
 				
 				wiki.addPage(page);
