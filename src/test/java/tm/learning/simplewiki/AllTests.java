@@ -4,9 +4,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import tm.learning.simplewiki.model.PageFinderImpTests;
-import tm.learning.simplewiki.model.WikiServImpTests_MainWikiExists;
-import tm.learning.simplewiki.model.WikiServImpTests_MainWikiNotExists;
+import tm.learning.simplewiki.controllers.HomeControllerMainWikiTests;
+import tm.learning.simplewiki.model.services.PageFinderImpTests;
+import tm.learning.simplewiki.model.services.WikiServImpTests_MainWikiExists;
+import tm.learning.simplewiki.model.services.WikiServImpTests_MainWikiNotExists;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 

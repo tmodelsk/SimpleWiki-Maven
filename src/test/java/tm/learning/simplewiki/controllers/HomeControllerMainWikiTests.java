@@ -1,4 +1,4 @@
-package tm.learning.simplewiki;
+package tm.learning.simplewiki.controllers;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
