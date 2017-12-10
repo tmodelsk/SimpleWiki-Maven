@@ -1,5 +1,7 @@
 package tm.learning.simplewiki.model.services;
 
+import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -9,6 +11,12 @@ import tm.learning.simplewiki.commons.WikiHtml;
 
 @Accessors(fluent=true)
 public class PageResult {
+	
+	@Getter @Setter
+	private WikiResult wiki= null;
+
+	@Getter @Setter
+	private PageMode mode;
 	
 	@Getter @Setter 
 	private PageUri pageUri= null;
@@ -23,8 +31,5 @@ public class PageResult {
 	private WikiHtml wikiHtml= null;
 	
 	@Getter @Setter
-	private WikiResult wiki= null;
-
-	@Getter @Setter
-	private PageMode mode;	
+	private LocalDateTime updatedDate = null;
 }

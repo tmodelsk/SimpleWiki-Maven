@@ -18,6 +18,12 @@
 		${page.htmlBody}
 	</td>
 </tr>
+<tr>
+<td colspan=2>
+<br/><br/>
+Last updated: ${page.updatedDate}
+</td>
+</tr>
 </table>
 </body>
 </html>

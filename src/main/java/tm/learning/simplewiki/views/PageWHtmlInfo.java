@@ -9,6 +9,9 @@ public class PageWHtmlInfo extends PageInfo {
 	@Getter @Setter
 	private String whtmlBody;
 	
+	@Getter @Setter
+	private String htmlBody;
+	
 	public PageWHtmlInfo(String name, String whtmlBody) {
 		super(name);
 		this.whtmlBody = whtmlBody;

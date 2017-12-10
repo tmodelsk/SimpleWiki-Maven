@@ -15,6 +15,6 @@ Edit page ${page.name}
 	<hr/>
 </form:form>
 <hr/>Current page looks like: <hr/>
- ${page.whtmlBody}
+ ${page.htmlBody}
 </body>
 </html>

@@ -1,5 +1,7 @@
 package tm.learning.simplewiki.model.repo.data;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,10 +41,15 @@ public class Page {
 	@Getter @Setter
 	@Basic
 	private String body;
+	
+	@Getter @Setter
+	private LocalDateTime createdDate;
 
+	@Getter @Setter
+	private LocalDateTime updatedDate;
 		
 	public Page(String name, String urlPrefix, String body) {
-		super();
+		this();
 		this.name = name;
 		this.urlPrefix = urlPrefix;
 		this.body = body;
@@ -50,6 +57,9 @@ public class Page {
 
 	public Page() {
 		super();
+		
+		createdDate = LocalDateTime.now();
+		updatedDate = LocalDateTime.now();
 	}
 
 	@Override

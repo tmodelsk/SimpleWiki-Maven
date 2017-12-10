@@ -1,5 +1,7 @@
 package tm.learning.simplewiki.model.services;
 
+import java.time.LocalDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,8 @@ public class WikiServiceImp implements WikiService {
 			val html = wikiHtmlTranslator.buildHtml(page);
 			res.html(html);
 			res.wikiHtml( new WikiHtml(page.getBody()));
+			
+			res.updatedDate(page.getUpdatedDate());
 		}
 		else {
 			res.mode(PageMode.Edit);
@@ -101,6 +105,7 @@ public class WikiServiceImp implements WikiService {
 		else {
 			page.setName(pageName);
 			page.setBody(whtml);
+			page.setUpdatedDate(LocalDateTime.now());
 			
 			pageDao.save(page);
 		}		

@@ -153,6 +153,7 @@ public class HomeController {
 		if(page != null) {
 			pageData.setName(page.name());
 			pageData.setHtmlBody(page.html().toString());
+			pageData.setUpdatedDate(page.updatedDate());
 		}
 		
 		return pageData;
@@ -162,7 +163,8 @@ public class HomeController {
 		
 		if(page != null) {
 			pageData.setName(page.name());
-			pageData.setWhtmlBody(page.html().toString());	
+			pageData.setHtmlBody(page.html().toString());
+			pageData.setWhtmlBody(page.wikiHtml().toString());
 		}
 		
 		return pageData;
