@@ -24,4 +24,15 @@ public class WikiHtmlTranslatorImpTests {
 		
 	}
 
+	@Test
+	public void newLine_shouldAddBr() {
+		val serv = new WikiHtmlTranslatorImp();
+		
+		val src = "aaa"+System.lineSeparator()+"bbb";
+		
+		val html = serv.buildHtml(new WikiHtml(src));
+		assertThat(html).isNotNull();
+		val htmlStr = html.toString();
+		assertThat(htmlStr).isEqualTo("aaa<br/>bbb");
+	}
 }

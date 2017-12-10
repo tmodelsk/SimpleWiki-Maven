@@ -31,6 +31,7 @@ public class Wiki {
 	private String description;
 
 	@Getter @Setter
+	@Column(unique=true)
 	private String urlPrefix;
 
 	@Getter @Setter

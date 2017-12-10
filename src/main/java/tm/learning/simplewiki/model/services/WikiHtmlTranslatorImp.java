@@ -35,8 +35,10 @@ public class WikiHtmlTranslatorImp implements WikiHtmlTranslator {
 	
 	private String processWikiHtml(String whtml) {
 		String res = "";
+		StringBuilder strB;
 		
-		Matcher matcher = pagePattern.matcher(whtml);
+		strB = new StringBuilder(whtml);
+		Matcher matcher = pageLinkPattern.matcher(strB);
 		
 		while(matcher.find()) {
 			String prefix, linkStr, suffix;
@@ -45,18 +47,21 @@ public class WikiHtmlTranslatorImp implements WikiHtmlTranslator {
 			linkStr = matcher.group(2);
 			suffix = matcher.group(3);
 			
-			whtml = prefix;
-			whtml += Ctm.msgFormat("<a href='{0}'>{1}</a>", linkStr, linkStr);
-			whtml += suffix;
+			strB = new StringBuilder();
+			strB.append(prefix);
+			strB.append(Ctm.msgFormat("<a href='{0}'>{1}</a>", linkStr, linkStr));
+			strB.append(suffix);
 			
-			matcher = pagePattern.matcher(whtml);
+			matcher = pageLinkPattern.matcher(strB);
 		}
 		
-		res = whtml;
+		res = strB.toString();
+		
+		res = res.replaceAll(System.lineSeparator(), "<br/>");
 		
 		return res;
 	}
 
 	
-	private static final Pattern pagePattern = Pattern.compile("(.*)\\[\\[(.+)\\]\\](.*)");
+	private static final Pattern pageLinkPattern = Pattern.compile("(.*)\\[\\[(.+)\\]\\](.*)", Pattern.DOTALL | Pattern.MULTILINE);
 }

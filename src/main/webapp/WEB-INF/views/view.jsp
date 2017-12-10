@@ -14,7 +14,8 @@
 		<br/><a href="./">Main</a>
 	</td>
 	<td>
-		<p><a href="?edit">Edit</a></p>
+		<p><a href="?edit">Edit page</a></p>
+		<h1>${page.name}</h1><hr/>
 		${page.htmlBody}
 	</td>
 </tr>

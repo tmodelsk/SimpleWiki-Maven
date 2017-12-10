@@ -117,25 +117,31 @@ public class WikiServiceImp implements WikiService {
 		
 		if(wikiDao == null) return;
 		
-		if(!initializationDone) {
-			logger.info("Initializing default wiki data");
-			
-			val wiki = new Wiki();
-			wiki.setUrlPrefix(null);
-			wiki.setName("Main wiki");
-			wiki.setDescription("Default main wiki");
-			
-			val page = new Page();
-			page.setUrlPrefix(null);
-			page.setName("Main");
-			page.setBody("<h3>Some body</h3><p>New wiki page: [[newPage]]</p>");
-			page.setDefault(true);
-			
-			wiki.addPage(page);
-						
-			wikiDao.save(wiki);
-			//pageDao.save(page);
-			initializationDone = true;
+		if(!initializationDone && !initializating) {
+			try {
+				initializating = true;
+				logger.info("Initializing default wiki data");
+				
+				val wiki = new Wiki();
+				wiki.setUrlPrefix(null);
+				wiki.setName("Main wiki");
+				wiki.setDescription("Default main wiki");
+				
+				val page = new Page();
+				page.setUrlPrefix(null);
+				page.setName("Main");
+				page.setBody("<h3>Some body</h3>"+System.lineSeparator()+"New wiki page: [[newPage]]");
+				page.setDefault(true);
+				
+				wiki.addPage(page);
+							
+				wikiDao.save(wiki);
+				//pageDao.save(page);
+				initializationDone = true;	
+			}
+			finally {
+				initializating = false;
+			}
 		}
 	}
 	
@@ -170,7 +176,8 @@ public class WikiServiceImp implements WikiService {
 	}
 
 	private boolean initializeOnCreation = false;
-	private boolean initializationDone = false;
+	private static boolean initializationDone = false;
+	private static boolean initializating = false;
 
 	private static final Logger logger = LoggerFactory.getLogger(WikiServiceImp.class);
 }
