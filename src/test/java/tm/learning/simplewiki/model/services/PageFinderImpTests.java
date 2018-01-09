@@ -27,7 +27,7 @@ public class PageFinderImpTests {
 		wiki.addPage(page);
 		
 		when(wikiDao.findByUrlPrefix(null)).thenReturn(wiki);
-		when(pageDao.findPage(null, null)).thenReturn(page);
+		when(pageDao.findPage(STRING_NULL, null)).thenReturn(page);
 		
 		val res = wikiServ.findWikiAndPage(rootUri);
 		
@@ -63,4 +63,6 @@ public class PageFinderImpTests {
 	private WikiDao wikiDao;
 	@Mock
 	private PageDao pageDao;
+	
+	private static final String STRING_NULL = null;
 }

@@ -8,16 +8,18 @@ import lombok.val;
 import tm.learning.simplewiki.model.repo.base.BaseDao;
 import tm.learning.simplewiki.model.repo.base.PageDao;
 import tm.learning.simplewiki.model.repo.data.Page;
+import tm.learning.simplewiki.model.repo.data.Wiki;
 
+@SuppressWarnings("unchecked")
 @Repository("PageDaoDb")
 public class PageDaoDb extends BaseDao<Integer, Page> implements PageDao {
 
-	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	public Page findPage(String wikiUrlPrefix, String pageUrlPrefix) {
 		
 		val sess = session();
 		
+		@SuppressWarnings("deprecation")
 		val pageCr = sess.createCriteria(Page.class);
 		
 		if(pageUrlPrefix != null) pageCr.add(Restrictions.eq("urlPrefix", pageUrlPrefix));
@@ -33,5 +35,16 @@ public class PageDaoDb extends BaseDao<Integer, Page> implements PageDao {
 		
 		return (Page) DataAccessUtils.singleResult(pageCr.list());
 	}
-
+	
+	@Override
+	public Page findPage(Wiki wiki, String pageUrlPrefix) {
+		val sess = session();
+		
+		@SuppressWarnings("deprecation")
+		val pageCr = sess.createCriteria(Page.class);
+		if(pageUrlPrefix != null) pageCr.add(Restrictions.eq("urlPrefix", pageUrlPrefix));
+		else pageCr.add(Restrictions.isNull("urlPrefix"));
+		
+		return (Page) DataAccessUtils.singleResult(pageCr.list());
+	}
 }

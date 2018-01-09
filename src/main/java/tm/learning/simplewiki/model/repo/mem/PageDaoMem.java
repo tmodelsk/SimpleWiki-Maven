@@ -10,6 +10,7 @@ import lombok.val;
 import tm.learning.simplewiki.commons.SimpleWikiBaseEx;
 import tm.learning.simplewiki.model.repo.base.PageDao;
 import tm.learning.simplewiki.model.repo.data.Page;
+import tm.learning.simplewiki.model.repo.data.Wiki;
 
 @Repository("PageDaoMem")
 public class PageDaoMem implements PageDao  {
@@ -25,6 +26,14 @@ public class PageDaoMem implements PageDao  {
 		
 		if(wiki == null) throw new SimpleWikiBaseEx("Wiki not found!");
 		
+		return findPage(wiki, pageUrlPrefix);
+	}
+	
+	@Autowired
+	private WikiDaoMem wikiDao;
+
+	@Override
+	public Page findPage(Wiki wiki, String pageUrlPrefix) {
 		Page page = null;
 		Optional<Page> pageOpt;
 		if(pageUrlPrefix == null) pageOpt = wiki.getPages().stream().filter(p -> p.isDefault()).findFirst();
@@ -34,8 +43,5 @@ public class PageDaoMem implements PageDao  {
 		
 		return page;
 	}
-	
-	@Autowired
-	private WikiDaoMem wikiDao;
 
 }
