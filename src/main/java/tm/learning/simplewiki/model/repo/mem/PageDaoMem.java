@@ -37,7 +37,7 @@ public class PageDaoMem implements PageDao  {
 		Page page = null;
 		Optional<Page> pageOpt;
 		if(pageUrlPrefix == null) pageOpt = wiki.getPages().stream().filter(p -> p.isDefault()).findFirst();
-		else pageOpt = wiki.getPages().stream().filter(p -> p.getUrlPrefix() != null && p.getUrlPrefix().equals(pageUrlPrefix)).findFirst();
+		else pageOpt = wiki.getPages().stream().filter(p -> p.getSymbol() != null && p.getSymbol().equals(pageUrlPrefix)).findFirst();
 		
 		if(pageOpt.isPresent()) page = pageOpt.get();
 		

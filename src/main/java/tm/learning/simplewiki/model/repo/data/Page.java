@@ -29,14 +29,14 @@ public class Page {
 	
 	@Getter @Setter
 	@Basic
+	private String symbol;
+	
+	@Getter @Setter
+	@Basic
 	private String name;
 	
 	@Getter @Setter
 	private boolean isDefault;
-	
-	@Getter @Setter
-	@Basic
-	private String urlPrefix;
 	
 	@Getter @Setter
 	@Basic
@@ -48,10 +48,10 @@ public class Page {
 	@Getter @Setter
 	private LocalDateTime updatedDate;
 		
-	public Page(String name, String urlPrefix, String body) {
+	public Page(String name, String symbol, String body) {
 		this();
 		this.name = name;
-		this.urlPrefix = urlPrefix;
+		this.symbol = symbol;
 		this.body = body;
 	}
 
@@ -70,7 +70,7 @@ public class Page {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + (isDefault ? 1231 : 1237);
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((urlPrefix == null) ? 0 : urlPrefix.hashCode());
+		result = prime * result + ((symbol == null) ? 0 : symbol.hashCode());
 		result = prime * result + ((wiki == null) ? 0 : wiki.hashCode());
 		
 		
@@ -103,10 +103,10 @@ public class Page {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (urlPrefix == null) {
-			if (other.urlPrefix != null)
+		if (symbol == null) {
+			if (other.symbol != null)
 				return false;
-		} else if (!urlPrefix.equals(other.urlPrefix))
+		} else if (!symbol.equals(other.symbol))
 			return false;
 		if (wiki == null) {
 			if (other.wiki != null)

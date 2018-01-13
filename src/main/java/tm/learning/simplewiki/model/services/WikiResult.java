@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 public class WikiResult {
 	
 	@Getter @Setter
-	private String urlPrefix;
+	private String symbol;
 	
 	@Getter @Setter
 	private String name;

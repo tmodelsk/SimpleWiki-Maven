@@ -26,14 +26,14 @@ public class WikiHtmlTranslatorImpTests {
 		val wiki = new Wiki();
 		
 		val targetPage = new Page();
-		targetPage.setUrlPrefix("targetPage");
+		targetPage.setSymbol("targetPage");
 		targetPage.setName("SomeTargetPageName");
 		wiki.addPage(targetPage);
 		
-		val thisPage = new Page("thisPage", "thisPage", Ctm.msgFormat("[[{0}]]", targetPage.getUrlPrefix()));
+		val thisPage = new Page("thisPage", "thisPage", Ctm.msgFormat("[[{0}]]", targetPage.getSymbol()));
 		wiki.addPage(thisPage);
 		
-		when(pageDao.findPage(wiki, targetPage.getUrlPrefix())).thenReturn(targetPage);
+		when(pageDao.findPage(wiki, targetPage.getSymbol())).thenReturn(targetPage);
 		
 		val html = wikiTranslator.buildHtml(thisPage);
 		

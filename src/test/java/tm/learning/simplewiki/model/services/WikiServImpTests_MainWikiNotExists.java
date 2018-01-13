@@ -1,7 +1,7 @@
 package tm.learning.simplewiki.model.services;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -15,12 +15,6 @@ import tm.learning.simplewiki.commons.Html;
 import tm.learning.simplewiki.commons.PageUri;
 import tm.learning.simplewiki.commons.SimpleWikiBaseEx;
 import tm.learning.simplewiki.model.repo.data.Page;
-import tm.learning.simplewiki.model.services.PageAndWiki;
-import tm.learning.simplewiki.model.services.PageFinder;
-import tm.learning.simplewiki.model.services.WikiHtmlTranslator;
-import tm.learning.simplewiki.model.services.WikiServiceImp;
-
-import static org.mockito.ArgumentMatchers.*;
 
 public class WikiServImpTests_MainWikiNotExists {
 

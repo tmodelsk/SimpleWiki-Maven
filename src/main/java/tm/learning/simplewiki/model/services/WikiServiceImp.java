@@ -94,7 +94,7 @@ public class WikiServiceImp implements WikiService {
 		if(page == null) {
 			// it's new page
 			page = new Page();
-			page.setUrlPrefix(pageUri.pagePrefix());
+			page.setSymbol(pageUri.pagePrefix());
 			page.setName(pageName);
 			page.setBody(whtml);
 			
@@ -123,12 +123,12 @@ public class WikiServiceImp implements WikiService {
 				logger.info("Initializing default wiki data");
 				
 				val wiki = new Wiki();
-				wiki.setUrlPrefix(null);
+				wiki.setSymbol(null);
 				wiki.setName("Main wiki");
 				wiki.setDescription("Default main wiki");
 				
 				val page = new Page();
-				page.setUrlPrefix(null);
+				page.setSymbol(null);
 				page.setName("Main");
 				
 				val strB = new StringBuilder();

@@ -58,7 +58,7 @@ public class WikiHtmlTranslatorImp implements WikiHtmlTranslator {
 				val targetPage = pageDao.findPage(wiki, linkStr);
 				if(targetPage != null) {
 					targetFounded = true;
-					linkUrl = targetPage.getUrlPrefix();
+					linkUrl = targetPage.getSymbol();
 					linkName = targetPage.getName();
 				}
 			}

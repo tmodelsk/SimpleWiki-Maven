@@ -19,9 +19,9 @@ public class WikiDaoMem implements WikiDao {
 		
 		Stream<Wiki> query;
 		if(urlPrefix != null) 
-			query = wikies.stream().filter( w -> w.getUrlPrefix() != null && w.getUrlPrefix().equals(urlPrefix));
+			query = wikies.stream().filter( w -> w.getSymbol() != null && w.getSymbol().equals(urlPrefix));
 		else
-			query = wikies.stream().filter( w -> w.getUrlPrefix() == null );
+			query = wikies.stream().filter( w -> w.getSymbol() == null );
 		
 		val resultOpt = query.findFirst();
 		

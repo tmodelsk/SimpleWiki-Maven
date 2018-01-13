@@ -23,16 +23,16 @@ public class Wiki {
 	@GeneratedValue
 	@Column(name = "Id", unique=true, nullable=false)
 	private Long id;
+	
+	@Getter @Setter
+	@Column(unique=true)
+	private String symbol;
 
 	@Getter @Setter
 	private String name;
 
 	@Getter @Setter
 	private String description;
-
-	@Getter @Setter
-	@Column(unique=true)
-	private String urlPrefix;
 
 	@Getter @Setter
 	@OneToMany(mappedBy="wiki", cascade=CascadeType.ALL)
@@ -43,12 +43,12 @@ public class Wiki {
 		page.setWiki(this);
 	}
 
-	public Wiki(String name, String description, String urlPrefix) {
+	public Wiki(String name, String description, String symbol) {
 		this();
 
 		this.name = name;
 		this.description = description;
-		this.urlPrefix = urlPrefix;
+		this.symbol = symbol;
 	}
 
 	public Wiki() {
